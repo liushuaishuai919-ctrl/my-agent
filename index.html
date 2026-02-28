@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>职场沟通重构器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #07070f;
+            font-family: 'Inter', sans-serif;
+            padding: 32px 16px;
+        }
+
+        /* 背景光晕 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 55% 45% at 15% 25%, rgba(109, 40, 217, 0.22) 0%, transparent 65%),
+                radial-gradient(ellipse 45% 40% at 85% 75%, rgba(6, 182, 212, 0.16) 0%, transparent 65%);
+            animation: glow-breathe 9s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes glow-breathe {
+            0% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+        }
+
+        /* 主卡片 */
+        .card {
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            padding: 52px 56px 48px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.55);
+            animation: card-in 0.7s ease;
+        }
+
+        @keyframes card-in {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 标签 */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 20px;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.25);
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #a78bfa;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #e0e0ff 0%, #a78bfa 45%, #22d3ee 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        /* 分隔线 */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), transparent);
+            margin-bottom: 36px;
+        }
+
+        /* 输入标签 */
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+        }
+
+        /* 呼吸灯输入框 */
+        .input-wrap {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .input-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #7c3aed, #0ea5e9);
+            opacity: 0.45;
+            animation: pulse-border 3s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes pulse-border {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+
+            50% {
+                opacity: 0.7;
+                box-shadow: 0 0 18px 4px rgba(124, 58, 237, 0.35);
+            }
+        }
+
+        textarea {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 140px;
+            padding: 20px 22px;
+            font-size: 17px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            color: #e8e8ff;
+            background: #0e0e1c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.7;
+            transition: border-color 0.2s;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        textarea:focus {
+            border-color: rgba(167, 139, 250, 0.5);
+        }
+
+        /* 按钮 */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.4);
+            transition: transform 0.18s, box-shadow 0.18s;
+            margin-bottom: 32px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 38px rgba(124, 58, 237, 0.55);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* 结果区域 */
+        .result-wrap {
+            display: none;
+            animation: result-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .result-wrap.show {
+            display: block;
+        }
+
+        @keyframes result-in {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .result-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+        }
+
+        .result-box {
+            padding: 24px 26px;
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #d4c8ff;
+            line-height: 1.75;
+            position: relative;
+        }
+
+        .result-box::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 18px;
+            font-size: 48px;
+            color: rgba(167, 139, 250, 0.3);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        /* 复制提示 */
+        .copy-tip {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: color 0.2s;
+            user-select: none;
+        }
+
+        .copy-tip:hover {
+            color: #a78bfa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="badge"><span class="badge-dot"></span>职场 AI · 沟通升级</div>
+        <h1>职场沟通重构器</h1>
+        <p class="subtitle">把你的真实想法，翻译成专业的职场话术</p>
+        <div class="divider"></div>
+
+        <label for="input-text">📝 输入你的原话</label>
+        <div class="input-wrap">
+            <textarea id="input-text" placeholder="例如：我不想加班了……"></textarea>
+        </div>
+
+        <button class="btn" id="convert-btn" onclick="convert()">
+            ✨ 一键重构表达
+        </button>
+
+        <div class="result-wrap" id="result-wrap">
+            <div class="result-label">💼 重构后的职场话术</div>
+            <div class="result-box" id="result-text"></div>
+            <div class="copy-tip" onclick="copyResult()">📋 点击复制</div>
+        </div>
+    </div>
+
+    <script>
+        function convert() {
+            const input = document.getElementById('input-text').value.trim();
+            if (!input) {
+                document.getElementById('input-text').focus();
+                return;
+            }
+
+            let output = '';
+
+            if (input.includes('加班')) {
+                output = '我正在评估当前任务的优先级，希望能优化流程以提高产出效率。';
+            } else if (input.includes('道歉') || input.includes('谁的错')) {
+                output = '我需要对齐一下问题的背景，确保我们给客户提供的解释是严谨且一致的。';
+            } else {
+                output = '收到。我们需要对齐一下核心目标，看看有没有更轻量化的替代方案？';
+            }
+
+            const resultText = document.getElementById('result-text');
+            const resultWrap = document.getElementById('result-wrap');
+
+            // 重置动画
+            resultWrap.classList.remove('show');
+            void resultWrap.offsetWidth;
+
+            resultText.textContent = output;
+            resultWrap.classList.add('show');
+        }
+
+        function copyResult() {
+            const text = document.getElementById('result-text').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const tip = document.querySelector('.copy-tip');
+                tip.textContent = '✅ 已复制！';
+                setTimeout(() => tip.textContent = '📋 点击复制', 1800);
+            });
+        }
+
+        // 支持 Ctrl+Enter 快捷键
+        document.getElementById('input-text').addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
+        });
+    </script>
+</body>
+
+</html>

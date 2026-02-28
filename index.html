@@ -299,6 +299,82 @@
         .copy-tip:hover {
             color: #a78bfa;
         }
+
+        /* 快捷场景标签 */
+        .tag-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 10px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.18s;
+            user-select: none;
+        }
+
+        .tag:hover {
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.12);
+            border-color: rgba(167, 139, 250, 0.35);
+        }
+
+        .tag.active {
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.15);
+            border-color: rgba(167, 139, 250, 0.5);
+        }
+
+        /* 联想推荐词 */
+        .suggest-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .suggest-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggest-tag {
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #22d3ee;
+            background: rgba(34, 211, 238, 0.08);
+            border: 1px solid rgba(34, 211, 238, 0.25);
+            cursor: pointer;
+            transition: all 0.18s;
+            user-select: none;
+        }
+
+        .suggest-tag:hover {
+            background: rgba(34, 211, 238, 0.18);
+            border-color: rgba(34, 211, 238, 0.5);
+        }
     </style>
 </head>
 
@@ -308,6 +384,21 @@
         <h1>现代职场沟通重构器</h1>
         <p class="subtitle">把你的真实想法，翻译成专业的职场话术</p>
         <div class="divider"></div>
+
+        <!-- 联想词快捷标签 -->
+        <div class="tag-label">💡 快速选择场景</div>
+        <div class="tag-list" id="tag-list">
+            <span class="tag" onclick="fillTag('加班')">加班</span>
+            <span class="tag" onclick="fillTag('下班')">下班</span>
+            <span class="tag" onclick="fillTag('升职')">升职</span>
+            <span class="tag" onclick="fillTag('加薪')">加薪</span>
+            <span class="tag" onclick="fillTag('裁员')">裁员</span>
+            <span class="tag" onclick="fillTag('团建')">团建</span>
+            <span class="tag" onclick="fillTag('开会')">开会</span>
+            <span class="tag" onclick="fillTag('锅')">背锅</span>
+            <span class="tag" onclick="fillTag('离职')">离职</span>
+            <span class="tag" onclick="fillTag('摸鱼')">摸鱼</span>
+        </div>
 
         <label for="input-text">📝 输入你的原话</label>
         <div class="input-wrap">
@@ -322,10 +413,92 @@
             <div class="result-label">💼 重构后的职场话术</div>
             <div class="result-box" id="result-text"></div>
             <div class="copy-tip" onclick="copyResult()">📋 点击复制</div>
+            <div class="suggest-label">🔗 相关联想场景</div>
+            <div class="suggest-list" id="suggest-list"></div>
         </div>
     </div>
 
     <script>
+        const scenes = {
+            '加班': {
+                examples: ['我不想加班了，太累了', '又要加班，领导真烦'],
+                output: '我正在评估当前任务的优先级与时间成本，建议我们探讨一下资源调配或流程优化的可能性，以提升整体交付效率。',
+                related: ['下班', '开会', '摸鱼']
+            },
+            '下班': {
+                examples: ['我想早点下班', '都5点了还不让走'],
+                output: '我计划在今日工作收尾后进行任务复盘，确保明日能以最佳状态推进项目进度。',
+                related: ['加班', '摸鱼', '团建']
+            },
+            '升职': {
+                examples: ['我想升职，凭什么不给我升', '都干了三年了还没升职'],
+                output: '我希望能与您沟通一下个人职业发展路径，了解在当前岗位上还需要在哪些维度持续精进，以匹配更高层级的岗位要求。',
+                related: ['加薪', '裁员', '离职']
+            },
+            '加薪': {
+                examples: ['我想涨工资', '工资太低了，我要加薪'],
+                output: '结合过去一段时间的项目交付情况与市场薪酬水平，我希望能就薪资结构做一次对齐，探讨是否有调整空间。',
+                related: ['升职', '离职', '裁员']
+            },
+            '裁员': {
+                examples: ['公司要裁员了怎么办', '我怕被裁'],
+                output: '当前公司正处于组织效能优化阶段，我将主动聚焦核心业务价值输出，确保个人贡献与团队目标高度对齐。',
+                related: ['离职', '升职', '加薪']
+            },
+            '团建': {
+                examples: ['不想去团建', '团建有什么意义'],
+                output: '团队凝聚力建设是提升协同效率的重要一环，我将积极参与，借此机会深化跨部门的沟通与协作默契。',
+                related: ['开会', '下班', '加班']
+            },
+            '开会': {
+                examples: ['又开会，浪费时间', '这个会没必要开'],
+                output: '为提升会议效率，建议我们提前明确议题优先级，聚焦核心决策点，将同步类信息转移至异步沟通渠道。',
+                related: ['加班', '团建', '摸鱼']
+            },
+            '锅': {
+                examples: ['这个锅不是我的', '凭什么让我背锅'],
+                output: '针对这次问题，我建议我们做一次客观的复盘，厘清各环节的责任边界，以便后续建立更完善的风控机制。',
+                related: ['开会', '裁员', '离职']
+            },
+            '离职': {
+                examples: ['我想辞职', '这工作不想干了'],
+                output: '经过深思熟虑，我希望就个人职业发展规划与您坦诚沟通，探讨未来方向是否仍与团队目标高度契合。',
+                related: ['加薪', '升职', '裁员']
+            },
+            '摸鱼': {
+                examples: ['我在摸鱼', '今天没什么事做'],
+                output: '当前阶段性任务已完成交付，我正在梳理下一阶段的工作计划，同步进行能力补充与知识沉淀。',
+                related: ['加班', '下班', '开会']
+            },
+        };
+
+        const tagExamples = {
+            '加班': '我不想加班了，太累了',
+            '下班': '都5点了还不让走',
+            '升职': '干了三年了，凭什么还没升职',
+            '加薪': '工资太低了，市场价都比这高',
+            '裁员': '听说公司要裁员了，我很担心',
+            '团建': '又要团建，真的不想去',
+            '开会': '今天会议太多了，根本没时间干活',
+            '锅': '这个锅不是我的，凭什么让我背',
+            '离职': '这份工作真的不想干了',
+            '摸鱼': '今天没什么正事，在摸鱼',
+        };
+
+        function fillTag(keyword) {
+            document.getElementById('input-text').value = tagExamples[keyword] || keyword;
+            // 高亮选中的标签
+            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function getMatchedScene(input) {
+            for (const key of Object.keys(scenes)) {
+                if (input.includes(key)) return { key, ...scenes[key] };
+            }
+            return null;
+        }
+
         function convert() {
             const input = document.getElementById('input-text').value.trim();
             if (!input) {
@@ -333,24 +506,31 @@
                 return;
             }
 
-            let output = '';
-
-            if (input.includes('加班')) {
-                output = '我正在评估当前任务的优先级，希望能优化流程以提高产出效率。';
-            } else if (input.includes('道歉') || input.includes('谁的错')) {
-                output = '我需要对齐一下问题的背景，确保我们给客户提供的解释是严谨且一致的。';
-            } else {
-                output = '收到。我们需要对齐一下核心目标，看看有没有更轻量化的替代方案？';
-            }
+            const matched = getMatchedScene(input);
+            const output = matched
+                ? matched.output
+                : '收到您的反馈。建议我们对齐一下核心目标，评估现有方案的可行性，寻找更具性价比的落地路径。';
 
             const resultText = document.getElementById('result-text');
             const resultWrap = document.getElementById('result-wrap');
+            const suggestList = document.getElementById('suggest-list');
 
-            // 重置动画
             resultWrap.classList.remove('show');
             void resultWrap.offsetWidth;
 
             resultText.textContent = output;
+
+            // 渲染相关联想场景
+            if (matched && matched.related) {
+                suggestList.innerHTML = matched.related.map(r =>
+                    `<span class="suggest-tag" onclick="fillTag('${r}');convert()">${r}</span>`
+                ).join('');
+            } else {
+                suggestList.innerHTML = Object.keys(scenes).slice(0, 4).map(r =>
+                    `<span class="suggest-tag" onclick="fillTag('${r}');convert()">${r}</span>`
+                ).join('');
+            }
+
             resultWrap.classList.add('show');
         }
 
@@ -363,7 +543,6 @@
             });
         }
 
-        // 支持 Ctrl+Enter 快捷键
         document.getElementById('input-text').addEventListener('keydown', function (e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
         });

@@ -231,6 +231,12 @@
             transform: translateY(0) scale(0.98);
         }
 
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* 结果区域 */
         .result-wrap {
             display: none;
@@ -499,28 +505,47 @@
             return null;
         }
 
-        function convert() {
+        async function convert() {
             const input = document.getElementById('input-text').value.trim();
             if (!input) {
                 document.getElementById('input-text').focus();
                 return;
             }
 
-            const matched = getMatchedScene(input);
-            const output = matched
-                ? matched.output
-                : '收到您的反馈。建议我们对齐一下核心目标，评估现有方案的可行性，寻找更具性价比的落地路径。';
-
+            const btn = document.getElementById('convert-btn');
             const resultText = document.getElementById('result-text');
             const resultWrap = document.getElementById('result-wrap');
             const suggestList = document.getElementById('suggest-list');
 
+            // 显示 loading
+            btn.disabled = true;
+            btn.textContent = '⏳ AI 生成中...';
             resultWrap.classList.remove('show');
-            void resultWrap.offsetWidth;
 
-            resultText.textContent = output;
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input }),
+                });
 
-            // 渲染相关联想场景
+                const data = await response.json();
+
+                if (!response.ok || !data.output) {
+                    resultText.textContent = '⚠️ AI 生成失败：' + (data.error || '未知错误');
+                } else {
+                    resultText.textContent = data.output;
+                }
+
+            } catch (err) {
+                resultText.textContent = '⚠️ 网络错误，请稍后重试。';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ 一键重构表达';
+            }
+
+            // 渲染联想场景
+            const matched = getMatchedScene(input);
             if (matched && matched.related) {
                 suggestList.innerHTML = matched.related.map(r =>
                     `<span class="suggest-tag" onclick="fillTag('${r}');convert()">${r}</span>`
@@ -531,6 +556,7 @@
                 ).join('');
             }
 
+            void resultWrap.offsetWidth;
             resultWrap.classList.add('show');
         }
 

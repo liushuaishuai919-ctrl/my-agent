@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // 只允许 POST 请求
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -9,46 +8,47 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: '输入内容不能为空' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'API Key 未配置' });
   }
 
-  const prompt = `你是一位资深职场沟通顾问，擅长将员工的真实想法转化为专业、得体的职场话术。
-
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: `你是一位资深职场沟通顾问，擅长将员工的真实想法转化为专业、得体的职场话术。
 规则：
-1. 保留原意，但用专业、委婉、积极的方式表达
+1. 保留原意，用专业、委婉、积极的方式表达
 2. 语气正式但不生硬，像一个有职业素养的人说出来的话
 3. 字数控制在 60-120 字之间
-4. 只输出重构后的话术内容，不要加任何解释或前缀
-
-用户的原话：${input}
-
-请输出重构后的职场话术：`;
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 300,
+4. 只输出重构后的话术内容，不要加任何解释或前缀`,
           },
-        }),
-      }
-    );
+          {
+            role: 'user',
+            content: `请将以下职场原话重构为专业话术：${input}`,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 300,
+      }),
+    });
 
     if (!response.ok) {
       const err = await response.json();
-      return res.status(500).json({ error: err.error?.message || 'Gemini API 调用失败' });
+      return res.status(500).json({ error: err.error?.message || 'Groq API 调用失败' });
     }
 
     const data = await response.json();
-    const output = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    const output = data.choices?.[0]?.message?.content?.trim();
 
     if (!output) {
       return res.status(500).json({ error: 'AI 未返回有效内容' });

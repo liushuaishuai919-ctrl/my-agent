@@ -344,6 +344,42 @@
             border-color: rgba(99, 102, 241, 0.4);
         }
 
+        /* 分享按钮行 */
+        .share-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+            user-select: none;
+        }
+
+        .share-btn:hover {
+            background: rgba(99, 102, 241, 0.12);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+        }
+
+        .share-btn.copied {
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.3);
+            background: rgba(52, 211, 153, 0.07);
+        }
+
         /* ===== 内容区域 ===== */
         .section {
             width: 100%;
@@ -509,7 +545,11 @@
         <div class="result-wrap" id="result-wrap">
             <div class="result-label">💼 重构后的职场话术</div>
             <div class="result-box" id="result-text"></div>
-            <div class="copy-tip" onclick="copyResult()">📋 点击复制</div>
+            <div class="share-row">
+                <button class="share-btn" id="copy-btn" onclick="copyResult()">📋 复制话术</button>
+                <button class="share-btn" id="link-btn" onclick="copyLink()">🔗 复制链接</button>
+                <button class="share-btn" id="share-btn" onclick="nativeShare()">📱 分享</button>
+            </div>
             <div class="suggest-label">🔗 相关联想场景</div>
             <div class="suggest-list" id="suggest-list"></div>
         </div>
@@ -740,6 +780,44 @@
         document.getElementById('input-text').addEventListener('keydown', function (e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
         });
+
+        // 复制话术
+        function copyResult() {
+            const text = document.getElementById('result-text').textContent;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = '✅ 已复制';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = '📋 复制话术'; btn.classList.remove('copied'); }, 1800);
+            });
+        }
+
+        // 复制网址
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const btn = document.getElementById('link-btn');
+                btn.textContent = '✅ 链接已复制';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = '🔗 复制链接'; btn.classList.remove('copied'); }, 1800);
+            });
+        }
+
+        // 原生分享（移动端）
+        async function nativeShare() {
+            const text = document.getElementById('result-text').textContent;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: '职场沟通重构器生成的话术',
+                        text: text,
+                        url: window.location.href,
+                    });
+                } catch (e) { /* 用户取消 */ }
+            } else {
+                copyLink();
+            }
+        }
 
         // 场景卡点击：填充内容 + 滚动到顶 + 自动转换
         function fillTagAndScroll(keyword) {

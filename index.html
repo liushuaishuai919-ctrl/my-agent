@@ -23,7 +23,7 @@
             background: #0b0b14;
             background-image: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
             font-family: 'Inter', sans-serif;
-            padding: 32px 16px;
+            padding: 32px 16px 76px;
         }
 
         /* 主卡片 */
@@ -319,109 +319,94 @@
             border-color: rgba(99, 102, 241, 0.4);
         }
 
-        /* 新闻区块 */
-        .news-section {
-            width: 100%;
-            max-width: 680px;
-            margin-top: 24px;
-            padding: 28px 32px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            animation: card-in 0.6s ease;
-        }
-
-        .news-header {
+        /* 底部新闻字幕条 */
+        .ticker-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
+            background: rgba(10, 10, 20, 0.92);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            overflow: hidden;
         }
 
-        .news-title-bar {
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.45);
-        }
-
-        .news-refresh {
-            font-size: 12px;
-            color: rgba(99, 102, 241, 0.7);
-            cursor: pointer;
-            transition: color 0.15s;
-            user-select: none;
-        }
-
-        .news-refresh:hover {
-            color: #818cf8;
-        }
-
-        .news-list {
-            list-style: none;
-        }
-
-        .news-item {
+        .ticker-label {
+            flex-shrink: 0;
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 11px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            animation: fade-up 0.3s ease;
-        }
-
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
-        .news-dot {
-            flex-shrink: 0;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(99, 102, 241, 0.6);
-            margin-top: 8px;
-        }
-
-        .news-link {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.72);
-            text-decoration: none;
-            line-height: 1.6;
-            transition: color 0.15s;
-            flex: 1;
-        }
-
-        .news-link:hover {
-            color: #a5b4fc;
-        }
-
-        .news-time {
-            flex-shrink: 0;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.25);
-            margin-top: 4px;
+            align-items: center;
+            gap: 6px;
+            padding: 0 16px;
+            height: 100%;
+            background: #dc2626;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
             white-space: nowrap;
         }
 
-        .news-skeleton .news-link {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 4px;
-            color: transparent;
-            animation: shimmer 1.2s ease-in-out infinite;
+        .ticker-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            animation: blink 1s ease-in-out infinite;
         }
 
-        @keyframes shimmer {
+        .ticker-track {
+            flex: 1;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
 
-            0%,
-            100% {
-                opacity: 0.4;
+        .ticker-inner {
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: ticker-scroll linear infinite;
+            animation-duration: var(--ticker-duration, 40s);
+        }
+
+        .ticker-track:hover .ticker-inner {
+            animation-play-state: paused;
+        }
+
+        @keyframes ticker-scroll {
+            from {
+                transform: translateX(0);
             }
 
-            50% {
-                opacity: 0.9;
+            to {
+                transform: translateX(-50%);
             }
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 32px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .ticker-item:hover {
+            color: #a5b4fc;
+        }
+
+        .ticker-sep {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -466,21 +451,12 @@
         </div>
     </div>
 
-    <!-- 新闻区块 -->
-    <div class="news-section" id="news-section">
-        <div class="news-header">
-            <div class="news-title-bar">📰 今日头条新闻</div>
-            <div class="news-refresh" onclick="loadNews()">🔄 刷新</div>
+    <!-- 底部新闻字幕条 -->
+    <div class="ticker-wrap">
+        <div class="ticker-label"><span class="ticker-dot"></span>头条</div>
+        <div class="ticker-track" id="ticker-track">
+            <div class="ticker-inner" id="ticker-inner">正在加载最新新闻……</div>
         </div>
-        <ul class="news-list" id="news-list">
-            <!-- 骨架屏占位 -->
-            <li class="news-item news-skeleton"><span class="news-dot"></span><a class="news-link">正在加载最新新闻，请稍候……</a>
-            </li>
-            <li class="news-item news-skeleton"><span class="news-dot"></span><a class="news-link">正在加载最新新闻，请稍候……</a>
-            </li>
-            <li class="news-item news-skeleton"><span class="news-dot"></span><a class="news-link">正在加载最新新闻，请稍候……</a>
-            </li>
-        </ul>
     </div>
 
     <script>
@@ -632,33 +608,32 @@
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
         });
 
-        // 格式化时间
-        function formatDate(str) {
-            if (!str) return '';
-            const d = new Date(str);
-            if (isNaN(d)) return '';
-            return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-        }
-
         async function loadNews() {
-            const list = document.getElementById('news-list');
-            list.innerHTML = '<li class="news-item news-skeleton"><span class="news-dot"></span><a class="news-link">加载中…</a></li>'.repeat(4);
+            const inner = document.getElementById('ticker-inner');
+            inner.textContent = '正在加载……';
             try {
                 const res = await fetch('/api/news');
                 const data = await res.json();
-                if (!data.items || data.items.length === 0) throw new Error('暂无数据');
-                list.innerHTML = data.items.map(item => `
-                    <li class="news-item">
-                        <span class="news-dot"></span>
-                        <a class="news-link" href="${item.link}" target="_blank" rel="noopener">${item.title}</a>
-                        <span class="news-time">${formatDate(item.pubDate)}</span>
-                    </li>`).join('');
+                if (!data.items || data.items.length === 0) throw new Error('无数据');
+
+                // 拼接新闻文本（用间隔符分隔）
+                const html = data.items.map(item =>
+                    `<a class="ticker-item" href="${item.link}" target="_blank" rel="noopener">${item.title}</a><span class="ticker-sep">｜</span>`
+                ).join('');
+
+                // 复制一份实现无缝循环
+                inner.innerHTML = html + html;
+
+                // 根据内容长度动态设置滚动速度（约 80px/s）
+                const totalWidth = inner.scrollWidth / 2;
+                const duration = Math.max(20, totalWidth / 80);
+                inner.style.setProperty('--ticker-duration', duration + 's');
+                document.querySelector('.ticker-inner').style.animationDuration = duration + 's';
             } catch (e) {
-                list.innerHTML = '<li class="news-item"><span class="news-dot"></span><a class="news-link">新闻加载失败，请点击刷新重试</a></li>';
+                inner.textContent = '新闻加载失败，请稍后重试';
             }
         }
 
-        // 页面加载时自动获取新闻
         loadNews();
     </script>
 </body>

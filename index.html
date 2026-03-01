@@ -23,7 +23,7 @@
             background: #0b0b14;
             background-image: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
             font-family: 'Inter', sans-serif;
-            padding: 32px 16px 76px;
+            padding: 32px 16px;
         }
 
         /* 主卡片 */
@@ -318,96 +318,6 @@
             background: rgba(99, 102, 241, 0.16);
             border-color: rgba(99, 102, 241, 0.4);
         }
-
-        /* 底部新闻字幕条 */
-        .ticker-wrap {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            background: rgba(10, 10, 20, 0.92);
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(12px);
-            z-index: 100;
-            overflow: hidden;
-        }
-
-        .ticker-label {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0 16px;
-            height: 100%;
-            background: #dc2626;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #fff;
-            white-space: nowrap;
-        }
-
-        .ticker-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #fff;
-            animation: blink 1s ease-in-out infinite;
-        }
-
-        .ticker-track {
-            flex: 1;
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .ticker-inner {
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-            animation: ticker-scroll linear infinite;
-            animation-duration: var(--ticker-duration, 40s);
-        }
-
-        .ticker-track:hover .ticker-inner {
-            animation-play-state: paused;
-        }
-
-        @keyframes ticker-scroll {
-            from {
-                transform: translateX(0);
-            }
-
-            to {
-                transform: translateX(-50%);
-            }
-        }
-
-        .ticker-item {
-            display: inline-block;
-            padding: 0 32px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.75);
-            text-decoration: none;
-            transition: color 0.15s;
-        }
-
-        .ticker-item:hover {
-            color: #a5b4fc;
-        }
-
-        .ticker-sep {
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 14px;
-            flex-shrink: 0;
-        }
     </style>
 </head>
 
@@ -448,14 +358,6 @@
             <div class="copy-tip" onclick="copyResult()">📋 点击复制</div>
             <div class="suggest-label">🔗 相关联想场景</div>
             <div class="suggest-list" id="suggest-list"></div>
-        </div>
-    </div>
-
-    <!-- 底部新闻字幕条 -->
-    <div class="ticker-wrap">
-        <div class="ticker-label"><span class="ticker-dot"></span>头条</div>
-        <div class="ticker-track" id="ticker-track">
-            <div class="ticker-inner" id="ticker-inner">正在加载最新新闻……</div>
         </div>
     </div>
 
@@ -607,34 +509,6 @@
         document.getElementById('input-text').addEventListener('keydown', function (e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
         });
-
-        async function loadNews() {
-            const inner = document.getElementById('ticker-inner');
-            inner.textContent = '正在加载……';
-            try {
-                const res = await fetch('/api/news');
-                const data = await res.json();
-                if (!data.items || data.items.length === 0) throw new Error('无数据');
-
-                // 拼接新闻文本（用间隔符分隔）
-                const html = data.items.map(item =>
-                    `<a class="ticker-item" href="${item.link}" target="_blank" rel="noopener">${item.title}</a><span class="ticker-sep">｜</span>`
-                ).join('');
-
-                // 复制一份实现无缝循环
-                inner.innerHTML = html + html;
-
-                // 根据内容长度动态设置滚动速度（约 80px/s）
-                const totalWidth = inner.scrollWidth / 2;
-                const duration = Math.max(20, totalWidth / 80);
-                inner.style.setProperty('--ticker-duration', duration + 's');
-                document.querySelector('.ticker-inner').style.animationDuration = duration + 's';
-            } catch (e) {
-                inner.textContent = '新闻加载失败，请稍后重试';
-            }
-        }
-
-        loadNews();
     </script>
 </body>
 

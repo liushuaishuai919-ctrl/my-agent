@@ -320,6 +320,135 @@
             background: rgba(99, 102, 241, 0.16);
             border-color: rgba(99, 102, 241, 0.4);
         }
+
+        /* ===== 内容区域 ===== */
+        .section {
+            width: 100%;
+            max-width: 680px;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 14px;
+            padding-left: 4px;
+        }
+
+        /* 三步说明 */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .step-card {
+            padding: 18px 16px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .step-num {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .step-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.6;
+        }
+
+        .step-text strong {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 4px;
+        }
+
+        /* 场景卡片 */
+        .scene-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .scene-card {
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .scene-card:hover {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+
+        .scene-emoji {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .scene-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .scene-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.38);
+            line-height: 1.5;
+        }
+
+        /* 页脚 */
+        .footer {
+            width: 100%;
+            max-width: 680px;
+            margin-top: 28px;
+            margin-bottom: 16px;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            line-height: 1.8;
+        }
+
+        .footer-text a {
+            color: rgba(99, 102, 241, 0.6);
+            text-decoration: none;
+        }
+
+        .footer-text a:hover {
+            color: #818cf8;
+        }
+
+        @media (max-width: 520px) {
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .scene-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 28px 20px;
+            }
+        }
     </style>
 </head>
 
@@ -362,6 +491,81 @@
             <div class="suggest-list" id="suggest-list"></div>
         </div>
     </div>
+
+    <!-- 三步使用说明 -->
+    <div class="section">
+        <div class="section-title">📖 如何使用</div>
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-num">①</div>
+                <div class="step-text">
+                    <strong>选择场景标签</strong>
+                    点击上方快捷标签，让输入框自动填入示例语句
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">②</div>
+                <div class="step-text">
+                    <strong>输入真实想法</strong>
+                    用自己的话说出内心想法，无需担心语气和措辞
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">③</div>
+                <div class="step-text">
+                    <strong>AI 一键重构</strong>
+                    单击按钮，AI 将为你生成专业得体的职场话术
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 常见场景 -->
+    <div class="section">
+        <div class="section-title">💼 常见职场场景</div>
+        <div class="scene-grid">
+            <div class="scene-card" onclick="fillTagAndScroll('加薪')">
+                <div class="scene-emoji">💰</div>
+                <div class="scene-name">谈判加薪</div>
+                <div class="scene-desc">想涨薪却不知如何开口？用数据和成果说话，让谈话更有自信。</div>
+            </div>
+            <div class="scene-card" onclick="fillTagAndScroll('加班')">
+                <div class="scene-emoji">⏰</div>
+                <div class="scene-name">拒绝加班</div>
+                <div class="scene-desc">加班要求不合理？委婉表达立场，保护个人边界同时不得罪。</div>
+            </div>
+            <div class="scene-card" onclick="fillTagAndScroll('升职')">
+                <div class="scene-emoji">🚀</div>
+                <div class="scene-name">申请晋升</div>
+                <div class="scene-desc">已经成熟却不知如何开口？让 AI 帮你表达成就和职业野心。</div>
+            </div>
+            <div class="scene-card" onclick="fillTagAndScroll('裁员')">
+                <div class="scene-emoji">🟥</div>
+                <div class="scene-name">面对裁员</div>
+                <div class="scene-desc">公司裁员怕被裁？理性回应，表现专业态度，留下好印象。</div>
+            </div>
+            <div class="scene-card" onclick="fillTagAndScroll('离职')">
+                <div class="scene-emoji">👋</div>
+                <div class="scene-name">优雅离职</div>
+                <div class="scene-desc">想辞职不好开口？保持尊重立场，让离职有始有终。</div>
+            </div>
+            <div class="scene-card" onclick="fillTagAndScroll('锅')">
+                <div class="scene-emoji">🛡️</div>
+                <div class="scene-name">巧妙背锅</div>
+                <div class="scene-desc">被冤枉了情绪激动？冷静回应推动客观复盘，澄清责任边界。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p class="footer-text">
+            🧠 现代职场沟通重构器 &nbsp;·&nbsp; 由 Groq AI 驱动生成内容<br>
+            本工具仅供职场沟通参考，请根据实际情况理性使用<br>
+            &copy; 2025 现代职场沟通重构器 &nbsp;·&nbsp;
+            <a href="/" title="职场话术生成工具">返回首页</a>
+        </p>
+    </footer>
 
     <script>
         const scenes = {
@@ -511,6 +715,13 @@
         document.getElementById('input-text').addEventListener('keydown', function (e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
         });
+
+        // 场景卡点击：填充内容 + 滚动到顶 + 自动转换
+        function fillTagAndScroll(keyword) {
+            document.getElementById('input-text').value = tagExamples[keyword] || keyword;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => convert(), 400);
+        }
     </script>
 </body>
 

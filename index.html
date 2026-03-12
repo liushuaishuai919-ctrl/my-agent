@@ -48,10 +48,62 @@
         @media (max-width: 1000px) {
             .container {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .preview-section {
                 order: -1;
+                position: relative;
+                top: 0;
+            }
+
+            .phone-frame {
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .editor-section {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            /* 手机端移除装饰性的手机壳，直接满屏内容 */
+            .phone-frame {
+                width: 100%;
+                height: auto;
+                border: none;
+                border-radius: 16px;
+                box-shadow: var(--shadow);
+            }
+
+            .phone-status-bar {
+                display: none;
+            }
+
+            .post-image {
+                height: 300px;
+            }
+
+            .history-sidebar {
+                width: 85%;
+                padding: 20px;
+            }
+
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .history-btn {
+                padding: 8px;
+                font-size: 12px;
             }
         }
 
@@ -502,6 +554,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
         }
 
         .history-btn:hover {

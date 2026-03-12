@@ -2,72 +2,337 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO 基础标签 -->
-    <title>职场沟通重构器 - AI一键生成专业职场话术</title>
-    <meta name="description" content="免费AI职场话术生成工具，将真实想法一键转化为专业、得体的职场表达。支持加薪、升职、加班、裁员、离职等10+职场场景。" />
-    <meta name="keywords" content="职场话术,AI生成,职场沟通,加薪话术,升职话术,职场表达,职场沟通重构器" />
-    <meta name="author" content="现代职场沟通重构器" />
-    <link rel="canonical" href="https://my-agent-virid.vercel.app/" />
-
-    <!-- Open Graph / 社交分享 -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://my-agent-virid.vercel.app/" />
-    <meta property="og:title" content="职场沟通重构器 - AI一键生成专业职场话术" />
-    <meta property="og:description" content="免费AI职场话术生成工具，一键将职场想法转化为专业表达，支持10+职场场景。" />
-    <meta property="og:locale" content="zh_CN" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="职场沟通重构器 - AI职场话术生成" />
-    <meta name="twitter:description" content="免费AI工具，一键将真实想法转化为专业职场话术。" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6245905201306527"
-        crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书爆款生成器 Pro - 100大主题库+在线编辑</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
     <style>
-        *,
-        *::before,
-        *::after {
+        :root {
+            --primary-color: #FF2442;
+            --primary-light: #ffebed;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --secondary-text: #666;
+            --white: #ffffff;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            --radius: 20px;
+        }
+
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 950px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-section {
+                order: -1;
+            }
+        }
+
+        /* 左侧编辑区 */
+        .editor-section {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--secondary-text);
+            margin-bottom: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .style-btn {
+            padding: 12px;
+            border: 1.5px solid #eee;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .style-btn.active {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(255, 36, 66, 0.25);
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 36, 66, 0.35);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .generate-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* 手机预览区 */
+        .preview-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #0b0b14;
-            background-image:
-                radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99, 102, 241, 0.14) 0%, transparent 65%),
-                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E");
-            font-family: 'Inter', sans-serif;
-            padding: 56px 16px 60px;
+            position: sticky;
+            top: 40px;
         }
 
-        /* 主卡片 */
-        .card {
+        .phone-frame {
+            width: 375px;
+            height: 740px;
+            background: white;
+            border-radius: 45px;
+            border: 12px solid #222;
+            overflow: hidden;
             position: relative;
-            width: 100%;
-            max-width: 740px;
-            padding: 44px 48px 40px;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(24px);
-            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
-            animation: card-in 0.5s ease;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes card-in {
+        .phone-status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .phone-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .phone-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 375px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .post-info {
+            padding: 20px;
+        }
+
+        /* 在线编辑样式 */
+        .editable {
+            outline: none;
+            transition: background 0.2s;
+            border-radius: 4px;
+            padding: 2px 4px;
+            border: 1px dashed transparent;
+        }
+
+        .editable:hover {
+            background: rgba(255, 36, 66, 0.05);
+            border-color: rgba(255, 36, 66, 0.2);
+        }
+
+        .editable:focus {
+            background: rgba(255, 36, 66, 0.08);
+            border-color: var(--primary-color);
+        }
+
+        .post-title {
+            font-size: 19px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .post-body {
+            font-size: 16px;
+            color: #333;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .post-tags {
+            color: #507daf;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .edit-tip {
+            font-size: 12px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .copy-actions {
+            margin-top: 20px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border: 1.5px solid #f0f0f0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #fafafa;
+            border-color: #ddd;
+        }
+
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -78,924 +343,181 @@
                 transform: translateY(0);
             }
         }
-
-        /* 顶部标签 */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 18px;
-            padding: 5px 14px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.6px;
-            text-transform: uppercase;
-            color: #818cf8;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #818cf8;
-            animation: blink 2.5s ease-in-out infinite;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.25;
-            }
-        }
-
-        h1 {
-            font-size: 2.1rem;
-            font-weight: 800;
-            line-height: 1.2;
-            background: linear-gradient(135deg, #e2e8f0 0%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.38);
-            font-size: 14px;
-            margin-bottom: 36px;
-        }
-
-        /* 分隔线 */
-        .divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.07);
-            margin-bottom: 32px;
-        }
-
-        /* 标签 */
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 10px;
-        }
-
-        /* 输入框 */
-        .input-wrap {
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 130px;
-            padding: 18px 20px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            color: #e2e8f0;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            resize: vertical;
-            outline: none;
-            line-height: 1.7;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.18);
-        }
-
-        textarea:focus {
-            border-color: rgba(99, 102, 241, 0.5);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* 按钮 */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            color: #fff;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.35);
-            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-            margin-bottom: 28px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .btn:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* 结果区域 */
-        .result-wrap {
-            display: none;
-        }
-
-        .result-wrap.show {
-            display: block;
-            animation: fade-up 0.35s ease;
-        }
-
-        @keyframes fade-up {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .result-label {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 10px;
-        }
-
-        .result-box {
-            padding: 22px 24px;
-            background: rgba(99, 102, 241, 0.07);
-            border: 1px solid rgba(99, 102, 241, 0.22);
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 500;
-            color: #c7d2fe;
-            line-height: 1.8;
-        }
-
-        /* 复制提示 */
-        .copy-tip {
-            text-align: right;
-            margin-top: 8px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.28);
-            cursor: pointer;
-            transition: color 0.2s;
-            user-select: none;
-        }
-
-        .copy-tip:hover {
-            color: #818cf8;
-        }
-
-        /* 快捷场景标签 */
-        .tag-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.35);
-            margin-bottom: 10px;
-        }
-
-        .tag-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-            margin-bottom: 24px;
-        }
-
-        .tag {
-            padding: 5px 13px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            cursor: pointer;
-            transition: all 0.15s;
-            user-select: none;
-        }
-
-        .tag:hover {
-            color: #a5b4fc;
-            background: rgba(99, 102, 241, 0.1);
-            border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        .tag.active {
-            color: #a5b4fc;
-            background: rgba(99, 102, 241, 0.14);
-            border-color: rgba(99, 102, 241, 0.4);
-        }
-
-        /* 联想推荐词 */
-        .suggest-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.3);
-            margin-top: 16px;
-            margin-bottom: 8px;
-        }
-
-        .suggest-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-        }
-
-        .suggest-tag {
-            padding: 4px 13px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #a5b4fc;
-            background: rgba(99, 102, 241, 0.08);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            cursor: pointer;
-            transition: all 0.15s;
-            user-select: none;
-        }
-
-        .suggest-tag:hover {
-            background: rgba(99, 102, 241, 0.16);
-            border-color: rgba(99, 102, 241, 0.4);
-        }
-
-        /* 分享按钮行 */
-        .share-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .share-btn {
-            flex: 1;
-            min-width: 90px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-align: center;
-            user-select: none;
-        }
-
-        .share-btn:hover {
-            background: rgba(99, 102, 241, 0.12);
-            border-color: rgba(99, 102, 241, 0.3);
-            color: #a5b4fc;
-        }
-
-        .share-btn.copied {
-            color: #34d399;
-            border-color: rgba(52, 211, 153, 0.3);
-            background: rgba(52, 211, 153, 0.07);
-        }
-
-        /* ===== 内容区域 ===== */
-        .section {
-            width: 100%;
-            max-width: 740px;
-            margin-top: 32px;
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            color: rgba(255, 255, 255, 0.55);
-            margin-bottom: 16px;
-            padding-left: 0;
-        }
-
-        .section-title::before {
-            content: '';
-            display: block;
-            width: 3px;
-            height: 16px;
-            border-radius: 2px;
-            background: linear-gradient(180deg, #818cf8, #6366f1);
-            flex-shrink: 0;
-        }
-
-        /* 三步说明 */
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-
-        .step-card {
-            padding: 22px 18px;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .step-card:hover {
-            background: rgba(99, 102, 241, 0.06);
-            border-color: rgba(99, 102, 241, 0.2);
-        }
-
-        .step-num {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            font-weight: 800;
-            color: #a5b4fc;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1.6;
-        }
-
-        .step-text strong {
-            display: block;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.82);
-            margin-bottom: 5px;
-        }
-
-        /* 场景卡片 */
-        .scene-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .scene-card {
-            padding: 20px 18px;
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .scene-card:hover {
-            background: rgba(99, 102, 241, 0.09);
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
-        }
-
-        .scene-emoji {
-            font-size: 24px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .scene-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 6px;
-        }
-
-        .scene-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.6;
-        }
-
-        /* 页脚 */
-        .footer {
-            width: 100%;
-            max-width: 740px;
-            margin-top: 36px;
-            margin-bottom: 16px;
-            padding: 24px 0 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.2);
-            line-height: 2;
-        }
-
-        .footer-text a {
-            color: rgba(99, 102, 241, 0.55);
-            text-decoration: none;
-            transition: color 0.15s;
-        }
-
-        .footer-text a:hover {
-            color: #818cf8;
-        }
-
-        @media (max-width: 700px) {
-            .scene-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 520px) {
-            .steps {
-                grid-template-columns: 1fr;
-            }
-
-            .scene-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card {
-                padding: 28px 20px;
-            }
-
-            .section {
-                max-width: 100%;
-            }
-
-            .footer {
-                max-width: 100%;
-            }
-        }
-
-        /* 语言切换按鈕 */
-        .lang-toggle {
-            position: absolute;
-            top: 18px;
-            right: 20px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.15s;
-            letter-spacing: 0.5px;
-            user-select: none;
-        }
-
-        .lang-toggle:hover {
-            background: rgba(99, 102, 241, 0.12);
-            border-color: rgba(99, 102, 241, 0.3);
-            color: #a5b4fc;
-        }
     </style>
 </head>
 
 <body>
-    <div class="card">
-        <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()">EN</button>
-        <div class="badge"><span class="badge-dot"></span><span data-i18n="badge">职场 AI · 沟通升级</span></div>
-        <h1 data-i18n="h1">现代职场沟通重构器</h1>
-        <p class="subtitle" data-i18n="subtitle">把你的真实想法，翻译成专业的职场话术</p>
-        <div class="divider"></div>
-
-        <div class="tag-label" data-i18n="tagLabel">💡 快速选择场景</div>
-        <div class="tag-list" id="tag-list">
-            <span class="tag" data-i18n-tag="加班" onclick="fillTag('加班')"></span>
-            <span class="tag" data-i18n-tag="下班" onclick="fillTag('下班')"></span>
-            <span class="tag" data-i18n-tag="升职" onclick="fillTag('升职')"></span>
-            <span class="tag" data-i18n-tag="加薪" onclick="fillTag('加薪')"></span>
-            <span class="tag" data-i18n-tag="裁员" onclick="fillTag('裁员')"></span>
-            <span class="tag" data-i18n-tag="团建" onclick="fillTag('团建')"></span>
-            <span class="tag" data-i18n-tag="开会" onclick="fillTag('开会')"></span>
-            <span class="tag" data-i18n-tag="锅" onclick="fillTag('锅')"></span>
-            <span class="tag" data-i18n-tag="离职" onclick="fillTag('离职')"></span>
-            <span class="tag" data-i18n-tag="摸鱼" onclick="fillTag('摸鱼')"></span>
-        </div>
-
-        <label for="input-text" data-i18n="inputLabel">📝 输入你的原话</label>
-        <div class="input-wrap">
-            <textarea id="input-text"></textarea>
-        </div>
-
-        <button class="btn" id="convert-btn" onclick="convert()" data-i18n="btnConvert">
-            ✨ 一键重构表达
-        </button>
-
-        <div class="result-wrap" id="result-wrap">
-            <div class="result-label" data-i18n="resultLabel">💼 重构后的职场话术</div>
-            <div class="result-box" id="result-text"></div>
-            <div class="share-row">
-                <button class="share-btn" id="copy-btn" onclick="copyResult()" data-i18n="copyBtn">📋 复制话术</button>
-                <button class="share-btn" id="link-btn" onclick="copyLink()" data-i18n="linkBtn">🔗 复制链接</button>
-                <button class="share-btn" id="share-btn" onclick="nativeShare()" data-i18n="shareBtn">📱 分享</button>
+    <div class="container">
+        <!-- 编辑区 -->
+        <div class="editor-section">
+            <div class="logo">
+                <div class="logo-icon">薯</div>
+                <h1>爆款生成器 Pro</h1>
             </div>
-            <div class="suggest-label" data-i18n="suggestLabel">🔗 相关联想场景</div>
-            <div class="suggest-list" id="suggest-list"></div>
-        </div>
-    </div>
 
-    <!-- 三步使用说明 -->
-    <div class="section">
-        <div class="section-title" data-i18n="howToUse">📖 如何使用</div>
-        <div class="steps">
-            <div class="step-card">
-                <div class="step-num">1</div>
-                <div class="step-text">
-                    <strong data-i18n="step1Title">选择场景标签</strong>
-                    <span data-i18n="step1Desc">点击上方快捷标签，让输入框自动填入示例语句</span>
+            <div class="form-group">
+                <label>🔥 选择/搜索 100大爆款主题</label>
+                <input type="text" id="topic" list="theme-list" placeholder="搜索主题，如：护肤、职场、穿搭...">
+                <datalist id="theme-list"></datalist>
+            </div>
+
+            <div class="form-group">
+                <label>💡 选择文案风格</label>
+                <div class="style-grid">
+                    <button class="style-btn active" onclick="setStyle(this, 'dry-goods')">📚 干货分享</button>
+                    <button class="style-btn" onclick="setStyle(this, 'story')">📖 情感故事</button>
+                    <button class="style-btn" onclick="setStyle(this, 'review')">⭐ 种草测评</button>
                 </div>
             </div>
-            <div class="step-card">
-                <div class="step-num">2</div>
-                <div class="step-text">
-                    <strong data-i18n="step2Title">输入真实想法</strong>
-                    <span data-i18n="step2Desc">用自己的话说出内心想法，无需担心语气和措辞</span>
-                </div>
+
+            <div class="form-group">
+                <label>🔑 核心关键词</label>
+                <input type="text" id="keywords" placeholder="用空格分开。例：显瘦 高级感 OOTD">
             </div>
-            <div class="step-card">
-                <div class="step-num">3</div>
-                <div class="step-text">
-                    <strong data-i18n="step3Title">AI 一键重构</strong>
-                    <span data-i18n="step3Desc">单击按鈕，AI 将为你生成专业得体的职场话术</span>
+
+            <button class="generate-btn" id="generate-btn" onclick="generatePost()">
+                🚀 一键生成爆款文案
+            </button>
+
+            <div class="copy-actions">
+                <button class="action-btn" onclick="copyContent('title')">📄 复制标题</button>
+                <button class="action-btn" onclick="copyContent('all')">🔗 复制全文</button>
+            </div>
+        </div>
+
+        <!-- 预览区 -->
+        <div class="preview-section">
+            <div class="edit-tip">✍️ 手机屏内的文字支持在线点击修改</div>
+            <div class="phone-frame">
+                <div class="phone-status-bar">
+                    <span>9:41</span>
+                    <div style="display: flex; gap: 6px;">📶 🛜 🔋</div>
+                </div>
+                <div class="phone-content" id="preview-content">
+                    <div class="post-image" id="preview-image">🖼️</div>
+                    <div class="post-info">
+                        <div class="post-title editable" id="preview-title" contenteditable="true">在这里输入主题开启灵感...</div>
+                        <div class="post-body editable" id="preview-body" contenteditable="true">
+                            选中左侧 100 大爆款主题库，点击生成，即可在这里看到效果。
+
+                            支持直接点击此处进行二次编辑修改哦！✨
+                        </div>
+                        <div class="post-tags" id="preview-tags">#小红书爆款 #AI助手</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- 常见场景 -->
-    <div class="section">
-        <div class="section-title" data-i18n="scenesTitle">💼 常见职场场景</div>
-        <div class="scene-grid">
-            <div class="scene-card" onclick="fillTagAndScroll('加薪')">
-                <div class="scene-emoji">💰</div>
-                <div class="scene-name" data-i18n="scene1Name">谈判加薪</div>
-                <div class="scene-desc" data-i18n="scene1Desc">想涨薪却不知如何开口？用数据和成果说话，让谈话更有自信。</div>
-            </div>
-            <div class="scene-card" onclick="fillTagAndScroll('加班')">
-                <div class="scene-emoji">⏰</div>
-                <div class="scene-name" data-i18n="scene2Name">拒绝加班</div>
-                <div class="scene-desc" data-i18n="scene2Desc">加班要求不合理？委婉表达立场，保护个人边界同时不得罪。</div>
-            </div>
-            <div class="scene-card" onclick="fillTagAndScroll('升职')">
-                <div class="scene-emoji">🚀</div>
-                <div class="scene-name" data-i18n="scene3Name">申请晋升</div>
-                <div class="scene-desc" data-i18n="scene3Desc">已经成熟却不知如何开口？让 AI 帮你表达成就和职业野心。</div>
-            </div>
-            <div class="scene-card" onclick="fillTagAndScroll('裁员')">
-                <div class="scene-emoji">🟥</div>
-                <div class="scene-name" data-i18n="scene4Name">面对裁员</div>
-                <div class="scene-desc" data-i18n="scene4Desc">公司裁员怕被裁？理性回应，表现专业态度，留下好印象。</div>
-            </div>
-            <div class="scene-card" onclick="fillTagAndScroll('离职')">
-                <div class="scene-emoji">👋</div>
-                <div class="scene-name" data-i18n="scene5Name">优雅离职</div>
-                <div class="scene-desc" data-i18n="scene5Desc">想辞职不好开口？保持尊重立场，让离职有始有终。</div>
-            </div>
-            <div class="scene-card" onclick="fillTagAndScroll('锅')">
-                <div class="scene-emoji">🛡️</div>
-                <div class="scene-name" data-i18n="scene6Name">巧妙背锅</div>
-                <div class="scene-desc" data-i18n="scene6Desc">被冤枉了情绪激动？冷静回应推动客观复盘，澄清责任边界。</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 页脚 -->
-    <footer class="footer">
-        <p class="footer-text">
-            🧠 <span data-i18n="footerBrand">现代职场沟通重构器</span> &nbsp;·&nbsp; <span data-i18n="footerPowered">由 Groq AI
-                驱动生成内容</span><br>
-            <span data-i18n="footerDisclaimer">本工具仅供职场沟通参考，请根据实际情况理性使用</span><br>
-            &copy; 2025 &nbsp;·&nbsp;
-            <a href="/" data-i18n="footerHome">返回首页</a>
-            &nbsp;·&nbsp;
-            <a href="/privacy.html" data-i18n="footerPrivacy">隐私政策</a>
-        </p>
-    </footer>
 
     <script>
-        const scenes = {
-            '加班': {
-                examples: ['我不想加班了，太累了', '又要加班，领导真烦'],
-                output: '当前任务量已持续超出合理工时范围，我希望能与您对齐一下工作优先级，探讨是否可以通过资源补充或任务拆分来改善现有工作节奏，保障团队的可持续产出。',
-                related: ['下班', '开会', '摸鱼']
-            },
-            '下班': {
-                examples: ['我想早点下班', '都5点了还不让走'],
-                output: '今日计划内的工作任务已基本完成，我准备结束今天的工作，如有紧急事项请随时联系我，明日我会第一时间跟进后续事项。',
-                related: ['加班', '摸鱼', '团建']
-            },
-            '升职': {
-                examples: ['我想升职，凭什么不给我升', '都干了三年了还没升职'],
-                output: '我在当前岗位已积累了较为扎实的经验，也取得了一些阶段性成果，希望能专门找个时间与您探讨一下职业发展的可能性，了解晋升通道和仍需补足的能力项。',
-                related: ['加薪', '裁员', '离职']
-            },
-            '加薪': {
-                examples: ['我想涨工资', '工资太低了，我要加薪'],
-                output: '我想跟您约一个单独沟通的机会，就个人薪酬做个汇报。过去一段时间我在项目上持续投入，也积累了可量化的成果，结合目前市场行情，希望能探讨薪酬是否有相应调整的空间，非常感谢您的时间。',
-                related: ['升职', '离职', '裁员']
-            },
-            '裁员': {
-                examples: ['公司要裁员了怎么办', '我怕被裁'],
-                output: '了解到公司当前处于组织调整阶段，我会持续专注于高价值工作的交付。同时也希望能与您做一次沟通，了解一下个人岗位的稳定性，便于我做好相应的职业规划与心理预期。',
-                related: ['离职', '升职', '加薪']
-            },
-            '团建': {
-                examples: ['不想去团建', '团建有什么意义'],
-                output: '理解团建对于团队文化建设的意义，我会积极参与。同时也想反馈一下，如果活动形式能更多兼顾大家的个人时间和参与意愿，相信凝聚力效果会更好。',
-                related: ['开会', '下班', '加班']
-            },
-            '开会': {
-                examples: ['又开会，浪费时间', '这个会没必要开'],
-                output: '今天会议排得比较密，我想确认一下哪几个是需要我重点参与的，其他的我是否可以通过会议纪要同步？这样能确保我把精力集中在最关键的讨论上，不影响整体推进效率。',
-                related: ['加班', '团建', '摸鱼']
-            },
-            '锅': {
-                examples: ['这个锅不是我的', '凭什么让我背锅'],
-                output: '对于这次问题，我建议先还原事件的完整链路，明确各环节的责任归属，基于事实进行客观复盘。这样不仅更公平，也更有助于我们从流程层面找到系统性的改进点。',
-                related: ['开会', '裁员', '离职']
-            },
-            '离职': {
-                examples: ['我想辞职', '这工作不想干了'],
-                output: '我最近对自己的职业发展做了比较深入的思考，想专门找个时间和您做一次坦诚的沟通，有一些关于个人未来规划的想法希望能当面汇报，也希望听听您的看法和建议。',
-                related: ['加薪', '升职', '裁员']
-            },
-            '摸鱼': {
-                examples: ['我在摸鱼', '今天没什么事做'],
-                output: '今日计划任务已完成，当前处于阶段性等待状态。我正在利用间隙时间整理项目文档、沉淀经验，同时学习相关技能，随时待命承接新的工作任务。',
-                related: ['加班', '下班', '开会']
-            },
-        };
+        // 100个精选热门主题
+        const popularThemes = [
+            "夏季微胖显瘦穿搭", "法式复古库案例", "职场新人穿搭指南", "10分钟快手早餐", "沉浸式护肤流程",
+            "极简主义生活方式", "我的书单分享", "出租屋改造计划", "新手Vlog剪辑教程", "好物分享不踩雷",
+            "面试避坑指南", "如何拒绝职场消耗", "时间管理大师秘籍", "平价彩妆大测评", "大厂员工真实一天",
+            "考研/考公上岸心得", "独居女孩的安全感", "去黄提亮有效护肤", "拍照姿势教学", "OOTD每日穿搭",
+            "宝藏旅游目的地", "周末去哪儿玩", "我的减肥餐打卡", "高效学习周计划", "情绪稳定秘籍",
+            "恋爱脑清醒指南", "提升幸福感的小物", "理财小白入门课", "自媒体运营起号", "如何写出爆款标题",
+            "iPad生产力工具", "英语口语速成法", "产后修复经验分享", "给20岁女孩的建议", "逆袭变美计划",
+            "家装风格大搜罗", "咖啡店探店日记", "我的年度爱用物", "新手化妆零失误", "职场穿搭优雅范",
+            "高质量睡眠好物", "运动补剂怎么选", "程序员脱发自救", "副业赚钱小项目", "独居美食不重样",
+            "护肤成分党必看", "我的职场减压法", "提升气质的小细节", "新手养猫全攻略", "露营装备清单",
+            "我的断舍离总结", "如何克服拖延症", "高效笔记系统分享", "零基础自学插画", "手机摄影调色教程",
+            "室内绿植红黑榜", "职场社交礼仪", "给30岁的人生感悟", "新手理财避坑", "深夜食堂系列",
+            "我的读书笔记", "如何建立自信心", "抗老精华深度评测", "日常淡妆教程", "气质穿搭公式",
+            "独处时的治愈瞬间", "我是如何变自律的", "提升颜值的发型", "宿舍好物大公开", "职场穿搭避雷",
+            "心理学入门书籍", "保持专注的工具", "秋季叠穿天花板", "美甲款式安利", "如何优雅地拒绝",
+            "高效健身流程", "产后心理调节", "自制夏日冷饮", "早起挑战30天", "我的理财复盘",
+            "职场PPT速成", "给准大一的新生建议", "我的护发心得", "如何缓解容貌焦虑", "周末一人食",
+            "提升审美的电影", "高效复习经验", "皮肤屏障修复", "日常通勤装", "高情商沟通术",
+            "如何发现自己的天赋", "我的职业规划", "新手烘焙入门", "提升品位的香水", "职场抗压手册",
+            "保持年轻的习惯", "如何拒绝无效社交", "我的自律生活", "提升表达能力", "职场女性成长"
+        ];
 
-        const tagExamples = {
-            '加班': '我不想加班了，太累了',
-            '下班': '都5点了还不让走',
-            '升职': '干了三年了，凭什么还没升职',
-            '加薪': '工资太低了，市场价都比这高',
-            '裁员': '听说公司要裁员了，我很担心',
-            '团建': '又要团建，真的不想去',
-            '开会': '今天会议太多了，根本没时间干活',
-            '锅': '这个锅不是我的，凭什么让我背',
-            '离职': '这份工作真的不想干了',
-            '摸鱼': '今天没什么正事，在摸鱼',
-        };
+        // 填充 Datalist
+        const datalist = document.getElementById('theme-list');
+        popularThemes.forEach(theme => {
+            let option = document.createElement('option');
+            option.value = theme;
+            datalist.appendChild(option);
+        });
 
-        function fillTag(keyword) {
-            document.getElementById('input-text').value = tagExamples[keyword] || keyword;
-            // 高亮选中的标签
-            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+        let currentStyle = 'dry-goods';
+
+        function setStyle(btn, style) {
+            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentStyle = style;
         }
 
-        function getMatchedScene(input) {
-            for (const key of Object.keys(scenes)) {
-                if (input.includes(key)) return { key, ...scenes[key] };
-            }
-            return null;
-        }
+        async function generatePost() {
+            const topicInput = document.getElementById('topic');
+            const topic = topicInput.value.trim();
+            const keywords = document.getElementById('keywords').value.trim();
 
-        async function convert() {
-            const input = document.getElementById('input-text').value.trim();
-            if (!input) {
-                document.getElementById('input-text').focus();
+            if (!topic) {
+                alert('请先选择或输入一个爆款主题哦～');
+                topicInput.focus();
                 return;
             }
 
-            const btn = document.getElementById('convert-btn');
-            const resultText = document.getElementById('result-text');
-            const resultWrap = document.getElementById('result-wrap');
-            const suggestList = document.getElementById('suggest-list');
-            const t = translations[currentLang];
-
-            btn.disabled = true;
-            btn.textContent = t.btnLoading;
-            resultWrap.classList.remove('show');
+            const btn = document.getElementById('generate-btn');
+            btn.classList.add('loading');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '⚡ AI 正在疯狂构思中...';
 
             try {
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ input, lang: currentLang }),
+                    body: JSON.stringify({ topic, keywords, style: currentStyle })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'AI 暂时掉线了，请稍后再试');
+                }
 
                 const data = await response.json();
 
-                if (!response.ok || !data.output) {
-                    resultText.textContent = t.errorAI + (data.error || (currentLang === 'zh' ? '未知错误' : 'Unknown error'));
-                } else {
-                    resultText.textContent = data.output;
-                }
+                // 更新 UI
+                document.getElementById('preview-title').textContent = data.title;
+                document.getElementById('preview-body').textContent = data.body;
+                document.getElementById('preview-tags').textContent = data.tags;
 
-            } catch (err) {
-                resultText.textContent = t.errorNetwork;
+                // 随机背景
+                const image = document.getElementById('preview-image');
+                image.textContent = '';
+                image.style.backgroundImage = `url('https://picsum.photos/seed/${Math.random()}/600/600')`;
+
+            } catch (error) {
+                console.error('Generation Error:', error);
+                alert('生成失败: ' + error.message);
             } finally {
-                btn.disabled = false;
-                btn.textContent = t.btnConvert;
+                btn.classList.remove('loading');
+                btn.innerHTML = originalBtnText;
             }
+        }
 
-            // 渲染联想场景
-            const matched = getMatchedScene(input);
-            if (matched && matched.related) {
-                suggestList.innerHTML = matched.related.map(r =>
-                    `<span class="suggest-tag" onclick="fillTag('${r}');convert()">${r}</span>`
-                ).join('');
+        function copyContent(type) {
+            let text = "";
+            if (type === 'title') {
+                text = document.getElementById('preview-title').innerText;
             } else {
-                suggestList.innerHTML = Object.keys(scenes).slice(0, 4).map(r =>
-                    `<span class="suggest-tag" onclick="fillTag('${r}');convert()">${r}</span>`
-                ).join('');
+                text = document.getElementById('preview-title').innerText + "\n\n" +
+                    document.getElementById('preview-body').innerText + "\n\n" +
+                    document.getElementById('preview-tags').innerText;
             }
 
-            void resultWrap.offsetWidth;
-            resultWrap.classList.add('show');
-        }
+            if (!text || text.includes('主题开启灵感')) {
+                alert('请先生成文案或手动编辑哦～');
+                return;
+            }
 
-        function copyResult() {
-            const text = document.getElementById('result-text').textContent;
             navigator.clipboard.writeText(text).then(() => {
-                const tip = document.querySelector('.copy-tip');
-                tip.textContent = '✅ 已复制！';
-                setTimeout(() => tip.textContent = '📋 点击复制', 1800);
+                alert('文案已在剪贴板啦，快去发布吧！✨');
             });
         }
-
-        // ===== i18n =====
-        const translations = {
-            zh: {
-                badge: '职场 AI · 沟通升级', h1: '现代职场沟通重构器',
-                subtitle: '把你的真实想法，翻译成专业的职场话术',
-                tagLabel: '💡 快速选择场景', inputLabel: '📝 输入你的原话',
-                placeholder: '例如：我不想加班了……',
-                btnConvert: '✨ 一键重构表达', btnLoading: '⏳ AI 生成中...',
-                resultLabel: '💼 重构后的职场话术',
-                copyBtn: '📋 复制话术', linkBtn: '🔗 复制链接', shareBtn: '📱 分享',
-                suggestLabel: '🔗 相关联想场景',
-                howToUse: '📖 如何使用',
-                step1Title: '选择场景标签', step1Desc: '点击上方快捷标签，让输入框自动填入示例语句',
-                step2Title: '输入真实想法', step2Desc: '用自己的话说出内心想法，无需担心语气和措辞',
-                step3Title: 'AI 一键重构', step3Desc: '单击按鈕，AI 将为你生成专业得体的职场话术',
-                scenesTitle: '💼 常见职场场景',
-                scene1Name: '谈判加薪', scene1Desc: '想涨薪却不知如何开口？用数据和成果说话，让谈话更有自信。',
-                scene2Name: '拒绝加班', scene2Desc: '加班要求不合理？委婉表达立场，保护个人边界同时不得罪。',
-                scene3Name: '申请晋升', scene3Desc: '已经成熟却不知如何开口？让 AI 帮你表达成就和职业野心。',
-                scene4Name: '面对裁员', scene4Desc: '公司裁员怕被裁？理性回应，表现专业态度，留下好印象。',
-                scene5Name: '优雅离职', scene5Desc: '想辞职不好开口？保持尊重立场，让离职有始有终。',
-                scene6Name: '巧妙背锅', scene6Desc: '被冤枉了情绪激动？冷静回应推动客观复盘，澄清责任边界。',
-                footerBrand: '现代职场沟通重构器', footerPowered: '由 Groq AI 驱动生成内容',
-                footerDisclaimer: '本工具仅供职场沟通参考，请根据实际情况理性使用',
-                footerHome: '返回首页', footerPrivacy: '隐私政策',
-                tags: { '加班': '加班', '下班': '下班', '升职': '升职', '加薪': '加薪', '裁员': '裁员', '团建': '团建', '开会': '开会', '锅': '背锅', '离职': '离职', '摸鱼': '摸鱼' },
-                errorAI: '⚠️ AI 生成失败：', errorNetwork: '⚠️ 网络错误，请稍后重试。', shareTitleAI: '职场沟通重构器',
-            },
-            en: {
-                badge: 'Workplace AI · Upgrade', h1: 'Workplace Communication Enhancer',
-                subtitle: 'Turn your real thoughts into professional workplace phrases',
-                tagLabel: '💡 Quick Scenario', inputLabel: '📝 Your Thoughts',
-                placeholder: 'e.g. I don\'t want to work overtime anymore...',
-                btnConvert: '✨ Enhance My Message', btnLoading: '⏳ AI generating...',
-                resultLabel: '💼 Professional Phrase',
-                copyBtn: '📋 Copy Phrase', linkBtn: '🔗 Copy Link', shareBtn: '📱 Share',
-                suggestLabel: '🔗 Related Scenarios',
-                howToUse: '📖 How to Use',
-                step1Title: 'Select Scenario', step1Desc: 'Click a quick tag to auto-fill an example sentence',
-                step2Title: 'Type Your Thoughts', step2Desc: 'Write what you really think — no need to worry about tone',
-                step3Title: 'AI Enhance', step3Desc: 'Click the button, AI will generate a professional phrase for you',
-                scenesTitle: '💼 Common Scenarios',
-                scene1Name: 'Salary Negotiation', scene1Desc: 'Don\'t know how to ask for a raise? Let data and results speak for you.',
-                scene2Name: 'Decline Overtime', scene2Desc: 'Unreasonable overtime request? Express your stance tactfully without offending.',
-                scene3Name: 'Request Promotion', scene3Desc: 'Ready but unsure how to bring it up? Let AI articulate your achievements.',
-                scene4Name: 'Face Layoffs', scene4Desc: 'Worried about being laid off? Respond professionally and leave a good impression.',
-                scene5Name: 'Graceful Resignation', scene5Desc: 'Hard to say you\'re leaving? Stay respectful and end on a positive note.',
-                scene6Name: 'Avoid Taking Blame', scene6Desc: 'Wrongly blamed? Respond calmly, push for objective review, clarify responsibilities.',
-                footerBrand: 'Workplace Communication Enhancer', footerPowered: 'Powered by Groq AI',
-                footerDisclaimer: 'For reference only. Use your own judgment in real situations.',
-                footerHome: 'Home', footerPrivacy: 'Privacy Policy',
-                tags: { '加班': 'Overtime', '下班': 'Off Work', '升职': 'Promotion', '加薪': 'Salary Raise', '裁员': 'Layoff', '团建': 'Team Event', '开会': 'Meeting', '锅': 'Taking Blame', '离职': 'Resign', '摸鱼': 'Slacking' },
-                errorAI: '⚠️ AI Error: ', errorNetwork: '⚠️ Network error, please try again.', shareTitleAI: 'Workplace Phrase',
-            },
-        };
-
-        let currentLang = localStorage.getItem('lang') || 'zh';
-
-        function applyLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('lang', lang);
-            const t = translations[lang];
-            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-            document.getElementById('lang-toggle').textContent = lang === 'zh' ? 'EN' : '中';
-            // 更新 data-i18n 元素
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key] !== undefined) el.textContent = t[key];
-            });
-            // 更新标签
-            document.querySelectorAll('[data-i18n-tag]').forEach(el => {
-                const key = el.getAttribute('data-i18n-tag');
-                el.textContent = t.tags[key] || key;
-            });
-            // 更新 placeholder
-            document.getElementById('input-text').placeholder = t.placeholder;
-        }
-
-        function toggleLang() {
-            applyLang(currentLang === 'zh' ? 'en' : 'zh');
-        }
-
-        // 初始化语言
-        applyLang(currentLang);
-
-        // 复制话术
-        function copyResult() {
-            const text = document.getElementById('result-text').textContent;
-            if (!text) return;
-            const t = translations[currentLang];
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('copy-btn');
-                btn.textContent = '✅ ' + (currentLang === 'zh' ? '已复制' : 'Copied!');
-                btn.classList.add('copied');
-                setTimeout(() => { btn.textContent = t.copyBtn; btn.classList.remove('copied'); }, 1800);
-            });
-        }
-
-        function copyLink() {
-            const t = translations[currentLang];
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                const btn = document.getElementById('link-btn');
-                btn.textContent = '✅ ' + (currentLang === 'zh' ? '链接已复制' : 'Link Copied!');
-                btn.classList.add('copied');
-                setTimeout(() => { btn.textContent = t.linkBtn; btn.classList.remove('copied'); }, 1800);
-            });
-        }
-
-        async function nativeShare() {
-            const text = document.getElementById('result-text').textContent;
-            const t = translations[currentLang];
-            if (navigator.share) {
-                try { await navigator.share({ title: t.shareTitleAI, text, url: window.location.href }); }
-                catch (e) { }
-            } else { copyLink(); }
-        }
-
-        // 场景卡点击
-        function fillTagAndScroll(keyword) {
-            const lang = currentLang;
-            const examplesEn = {
-                '加班': 'I don\'t want to work overtime anymore, I\'m exhausted',
-                '下班': 'It\'s 5pm, why won\'t they let us leave?',
-                '升职': 'I\'ve been here 3 years, why haven\'t I been promoted?',
-                '加薪': 'My salary is too low, I want a raise',
-                '裁员': 'I\'m worried I might get laid off',
-                '团建': 'I don\'t want to go to the team building event',
-                '开会': 'Too many meetings today, I can\'t get anything done',
-                '锅': 'This is not my fault, why am I being blamed?',
-                '离职': 'I really don\'t want to do this job anymore',
-                '摸鱼': 'I have nothing to do today, just slacking',
-            };
-            document.getElementById('input-text').value = lang === 'en'
-                ? (examplesEn[keyword] || keyword)
-                : (tagExamples[keyword] || keyword);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => convert(), 400);
-        }
-
-        document.getElementById('input-text').addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') convert();
-        });
     </script>
 </body>
 

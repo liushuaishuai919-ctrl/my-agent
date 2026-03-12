@@ -3,33 +3,34 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { input, lang = 'zh' } = req.body;
-  if (!input || !input.trim()) {
-    return res.status(400).json({ error: lang === 'en' ? 'Input cannot be empty' : '输入内容不能为空' });
+  const { topic, keywords, style } = req.body;
+
+  if (!topic) {
+    return res.status(400).json({ error: '主题不能为空' });
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY; // 请确保在 Vercel 环境变量中配置此项
   if (!apiKey) {
-    return res.status(500).json({ error: 'API Key not configured' });
+    return res.status(500).json({ error: 'API Key 未配置，请联系管理员' });
   }
 
-  const systemPrompt = lang === 'en'
-    ? `You are a senior professional workplace communication coach. Rephrase the user's raw thoughts into polished, professional, and diplomatic workplace language.
-Rules:
-1. Preserve the original intent but express it professionally and tactfully
-2. Use a formal yet natural tone — like something a highly professional person would genuinely say
-3. Keep the response between 40-80 words
-4. Output only the rephrased text, no explanation or prefix`
-    : `你是一位资深职场沟通顾问，擅长将员工的真实想法转化为专业、得体的职场话术。
-规则：
-1. 保留原意，用专业、委婉、积极的方式表达
-2. 语气正式但不生硬，像一个有职业素养的人说出来的话
-3. 字数控制在 60-120 字之间
-4. 只输出重构后的话术内容，不要加任何解释或前缀`;
+  const systemPrompt = `你是一位顶级小红书文案专家，擅长创作极具吸引力的“标题党”内容，并深谙小红书的流量密码。
+你的目标是根据用户提供的主题、关键词和风格，生成一篇完美的爆款文案。
 
-  const userPrompt = lang === 'en'
-    ? `Please rephrase the following workplace thought into a professional phrase: ${input}`
-    : `请将以下职场原话重构为专业话术：${input}`;
+规则：
+1. **标题**：极其吸引眼球，必须包含至少1个Emoji，字数控制在20字内。
+2. **正文**：结构清晰（痛点+方案+金句），分段明确，每段话结尾或重点处必须插入贴切的Emoji。
+3. **标签**：生成3-5个相关的热门话题标签（以#开头）。
+4. **输出格式**：必须严格按照以下 JSON 格式返回结果（不要包含任何其他解释）：
+{
+  "title": "生成的标题",
+  "body": "生成的正文内容",
+  "tags": "#标签1 #标签2 #标签3"
+}`;
+
+  const userPrompt = `主题：${topic}
+关键词：${keywords || '无'}
+文案风格：${style || '干货分享'}`;
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -44,25 +45,28 @@ Rules:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        temperature: 0.7,
-        max_tokens: 300,
+        temperature: 0.85,
+        max_tokens: 1000,
+        response_format: { type: "json_object" }
       }),
     });
 
     if (!response.ok) {
       const err = await response.json();
-      return res.status(500).json({ error: err.error?.message || 'Groq API error' });
+      return res.status(500).json({ error: err.error?.message || 'AI 生成失败' });
     }
 
     const data = await response.json();
-    const output = data.choices?.[0]?.message?.content?.trim();
+    const resultStr = data.choices?.[0]?.message?.content;
 
-    if (!output) {
-      return res.status(500).json({ error: lang === 'en' ? 'No response from AI' : 'AI 未返回有效内容' });
+    try {
+      const result = JSON.parse(resultStr);
+      return res.status(200).json(result);
+    } catch (e) {
+      return res.status(500).json({ error: 'AI 返回格式错误' });
     }
 
-    return res.status(200).json({ output });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: '服务器内部错误: ' + err.message });
   }
 }

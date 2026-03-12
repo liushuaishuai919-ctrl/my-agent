@@ -670,6 +670,27 @@
             document.getElementById('preview-body').textContent = "AI 文案师正在为您构思内容...\n添加 Emoji ✨...\n优化标题党逻辑 🔥...";
             document.getElementById('sensitive-panel').classList.remove('active');
 
+            // --- 智能环境检测：本地 file:// 协议下开启 Demo 模式 ---
+            if (window.location.protocol === 'file:') {
+                console.log('检测到本地环境，开启 Demo/Mock 模式');
+                await new Promise(r => setTimeout(r, 1800)); // 模拟 AI 思考动效
+
+                const mockData = {
+                    titles: [
+                        `🔥 避雷！${topic}千万别乱做`,
+                        `✨ 纯干货！手把手教你搞定${topic}`,
+                        `宝藏分享 | ${topic}这一篇就够了`
+                    ],
+                    body: `这里是为【${topic}】生成的模拟爆款文案示例 ✨\n\n【本地预览说明】\n由于浏览器安全限制，本地 file:// 环境无法直接调用 AI 接口。目前已自动为您开启「Demo 演示模式」。\n\n1. 核心关键词：${keywords || '默认爆款'}\n2. 生成风格：${currentStyle}\n3. 功能演示：您可以点击上方的圆点切换三版标题，或使用下方的敏感词检测功能。\n\n部署到 Vercel 并配置 Key 后，这里将显示由 Llama-3.3 实时生成的真实文案！🚀`,
+                    tags: `#${topic} #小红书爆款 #AI创作 #自媒体运营`
+                };
+
+                updateUIWithData(mockData, topic);
+                btn.classList.remove('loading');
+                btn.innerHTML = '🚀 激发 AI 生成爆款 (Demo模式)';
+                return;
+            }
+
             try {
                 const response = await fetch('/api/generate', {
                     method: 'POST',
@@ -684,38 +705,7 @@
 
                 if (!response.ok) throw new Error('生成失败');
                 const data = await response.json();
-
-                aiTitles = data.titles || [data.title];
-                renderTitle(0);
-                document.getElementById('preview-body').textContent = data.body;
-                document.getElementById('preview-tags').textContent = data.tags;
-
-                // 随机背景图
-                document.getElementById('preview-image').style.backgroundImage = `url('https://picsum.photos/seed/${Math.random()}/600/600')`;
-
-                // 渲染切换点
-                const dotGroup = document.getElementById('dot-group');
-                dotGroup.innerHTML = '';
-                if (aiTitles.length > 1) {
-                    document.getElementById('title-switcher-ui').style.display = 'flex';
-                    aiTitles.forEach((_, i) => {
-                        const dot = document.createElement('div');
-                        dot.className = `switch-dot ${i === 0 ? 'active' : ''}`;
-                        dot.onclick = () => renderTitle(i);
-                        dotGroup.appendChild(dot);
-                    });
-                } else {
-                    document.getElementById('title-switcher-ui').style.display = 'none';
-                }
-
-                // 保存到历史记录
-                saveHistory({
-                    title: aiTitles[0],
-                    body: data.body,
-                    tags: data.tags,
-                    topic: topic,
-                    time: new Date().toLocaleString()
-                });
+                updateUIWithData(data, topic);
 
             } catch (err) {
                 console.error(err);
@@ -724,6 +714,41 @@
                 btn.classList.remove('loading');
                 btn.innerHTML = '🚀 激发 AI 生成爆款';
             }
+        }
+
+        // 抽取 UI 更新逻辑
+        function updateUIWithData(data, topic) {
+            aiTitles = data.titles || [data.title || data.titles[0]];
+            renderTitle(0);
+            document.getElementById('preview-body').textContent = data.body;
+            document.getElementById('preview-tags').textContent = data.tags;
+
+            // 随机背景图
+            document.getElementById('preview-image').style.backgroundImage = `url('https://picsum.photos/seed/${Math.random()}/600/600')`;
+
+            // 渲染切换点
+            const dotGroup = document.getElementById('dot-group');
+            dotGroup.innerHTML = '';
+            if (aiTitles.length > 1) {
+                document.getElementById('title-switcher-ui').style.display = 'flex';
+                aiTitles.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = `switch-dot ${i === 0 ? 'active' : ''}`;
+                    dot.onclick = () => renderTitle(i);
+                    dotGroup.appendChild(dot);
+                });
+            } else {
+                document.getElementById('title-switcher-ui').style.display = 'none';
+            }
+
+            // 保存到历史记录
+            saveHistory({
+                title: aiTitles[0],
+                body: data.body,
+                tags: data.tags,
+                topic: topic,
+                time: new Date().toLocaleString()
+            });
         }
 
         function renderTitle(index) {

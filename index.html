@@ -546,9 +546,9 @@
             <div class="form-group">
                 <label>📚 文案风格</label>
                 <div class="style-grid">
-                    <button class="style-btn active" onclick="setStyle(this, 'dry-goods')">干货分享</button>
-                    <button class="style-btn" onclick="setStyle(this, 'story')">情感故事</button>
-                    <button class="style-btn" onclick="setStyle(this, 'review')">种草测评</button>
+                    <button class="style-btn active" onclick="setStyle(this, 'sincere-pro')">纯干货(认真版)</button>
+                    <button class="style-btn" onclick="setStyle(this, 'cute-chat')">碎碎念(可爱版)</button>
+                    <button class="style-btn" onclick="setStyle(this, 'spicy-review')">避雷针(毒舌版)</button>
                 </div>
             </div>
 
@@ -639,7 +639,7 @@
         const datalist = document.getElementById('theme-list');
         popularThemes.forEach(t => { const op = document.createElement('option'); op.value = t; datalist.appendChild(op); });
 
-        let currentStyle = 'dry-goods';
+        let currentStyle = 'sincere-pro';
         let aiTitles = []; // 存储生成的 3 个标题
         const lengths = ['100', '200', '300', '400', '500'];
         const lengthTexts = [
@@ -681,19 +681,28 @@
                 console.log('检测到本地环境，开启 Demo/Mock 模式');
                 await new Promise(r => setTimeout(r, 1800)); // 模拟 AI 思考动效
 
-                const mockData = {
-                    titles: [
-                        `🔥 避雷！${topic}千万别乱做`,
-                        `✨ 纯干货！手把手教你搞定${topic}`,
-                        `宝藏分享 | ${topic}这一篇就够了`
-                    ],
-                    body: `这里是为【${topic}】生成的模拟爆款文案示例 ✨\n\n【本地预览说明】\n由于浏览器安全限制，本地 file:// 环境无法直接调用 AI 接口。目前已自动为您开启「Demo 演示模式」。\n\n1. 核心关键词：${keywords || '默认爆款'}\n2. 生成风格：${currentStyle}\n3. 功能演示：您可以点击上方的圆点切换三版标题，或使用下方的敏感词检测功能。\n\n部署到 Vercel 并配置 Key 后，这里将显示由 Llama-3.3 实时生成的真实文案！🚀`,
-                    tags: `#${topic} #小红书爆款 #AI创作 #自媒体运营`
+                const mocks = {
+                    'sincere-pro': {
+                        titles: [`🔥 避雷！${topic}千万别乱做`, `✨ 纯干货！敲重点！${topic}全攻略`, `建议收藏 | ${topic}这一篇就够了`],
+                        body: `讲真，关于【${topic}】我真的研究了很久呜呜😭 很多姐妹都直接掉坑里了！\n\n今天整理这份清单真的是压箱底了！没有任何虚头巴脑的，全是我一点点抠出来的细节细节细节！点赞收藏起来，不然刷着刷着就找不到我辣～\n\n【本地预览说明】\n已开启「人格化 Demo 模式」。部署到 Vercel 后，这里的真实 AI 文案会更有人味哦！🚀`,
+                        tags: `#${topic} #干货 #小红书成长`
+                    },
+                    'cute-chat': {
+                        titles: [`啊啊啊！${topic}也太好看了吧✨`, `救命惹😭 谁懂${topic}的含金量？`, `今日份${topic}碎碎念👋`],
+                        body: `家人们！谁懂啊！！我真的哭死呜呜呜😭 今天发现的【${topic}】也太绝了吧！！✨\n\n我不允许还有姐妹不知道这个宝藏！真的是氛围感拉满了快来跟我一起分享这份快乐呀～比心心💗\n\n【本地预览说明】\n已开启「碎碎念风格」Demo。真实环境下的 AI 会用更可爱的语气陪你聊天哦！🌸`,
+                        tags: `#${topic} #我的碎碎念 #宝藏分享`
+                    },
+                    'spicy-review': {
+                        titles: [`听我一句劝，${topic}真的别乱冲❌`, `大实话！${topic}到底值不值得？`, `拔草日记：${topic}别被营销骗了`],
+                        body: `真的无语了朋友们，写在前面：【${topic}】并不是所有人都适合！！❌\n\n别被那些营销号带节奏了，我今天就要说实话（可能有点毒舌但都是真心的）！如果你是为了跟风，那你可以划走了，不要浪费这个钱呜呜😭\n\n【本地预览说明】\n已开启「避雷针风格」Demo。真实 AI 会帮你犀利吐槽，去除所有 AI 味！🔥`,
+                        tags: `#${topic} #避雷 #大实话`
+                    }
                 };
 
+                const mockData = mocks[currentStyle] || mocks['sincere-pro'];
                 updateUIWithData(mockData, topic);
                 btn.classList.remove('loading');
-                btn.innerHTML = '🚀 激发 AI 生成爆款 (Demo模式)';
+                btn.innerHTML = '🚀 激发 AI 生成爆款 (人格化Demo)';
                 return;
             }
 

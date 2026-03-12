@@ -70,10 +70,13 @@ export default async function handler(req, res) {
     const resultStr = data.choices?.[0]?.message?.content;
 
     try {
-      const result = JSON.parse(resultStr);
+      // 增强鲁棒性：剥离可能存在的 Markdown 代码块标记
+      const cleanedStr = resultStr.replace(/```json\n?|```/g, '').trim();
+      const result = JSON.parse(cleanedStr);
       return res.status(200).json(result);
     } catch (e) {
-      return res.status(500).json({ error: 'AI 返回格式错误' });
+      console.error('JSON Parse Error:', e, 'Raw Content:', resultStr);
+      return res.status(500).json({ error: 'AI 返回内容格式解析失败，请重试' });
     }
 
   } catch (err) {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小红书爆款生成器 Pro - 100大主题库+在线编辑</title>
+    <title>小红书爆款生成器 Pro Max - 行业领先 AI 驱动</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
         rel="stylesheet">
     <style>
@@ -15,8 +15,8 @@
             --text-color: #333;
             --secondary-text: #666;
             --white: #ffffff;
-            --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-            --radius: 20px;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius: 24px;
         }
 
         * {
@@ -37,15 +37,15 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            margin-top: 20px;
         }
 
-        @media (max-width: 950px) {
+        @media (max-width: 1000px) {
             .container {
                 grid-template-columns: 1fr;
             }
@@ -62,56 +62,67 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             animation: fadeIn 0.8s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 30px;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: var(--primary-color);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 900;
-            font-size: 20px;
+            font-size: 24px;
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 900;
             letter-spacing: -0.5px;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 5px;
         }
 
         label {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 14px;
             font-weight: 700;
             color: var(--secondary-text);
             margin-bottom: 10px;
         }
 
+        .label-hint {
+            font-weight: 400;
+            font-size: 12px;
+            color: #999;
+        }
+
         input,
         select,
         textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #f0f0f0;
-            border-radius: 14px;
+            padding: 16px;
+            border: 2px solid #f2f2f2;
+            border-radius: 16px;
             font-size: 16px;
             outline: none;
             transition: all 0.3s ease;
+            background: #fafafa;
         }
 
         input:focus,
@@ -122,76 +133,98 @@
             box-shadow: 0 0 0 4px var(--primary-light);
         }
 
+        /* 滑块样式 */
+        .slider-container {
+            padding: 10px 0;
+        }
+
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #eee;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 36, 66, 0.3);
+        }
+
         .style-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
         .style-btn {
-            padding: 12px;
+            padding: 14px;
             border: 1.5px solid #eee;
-            border-radius: 12px;
+            border-radius: 14px;
             background: white;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.2s;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .style-btn.active {
             background: var(--primary-light);
             border-color: var(--primary-color);
             color: var(--primary-color);
-            font-weight: 700;
         }
 
         .generate-btn {
             width: 100%;
-            padding: 20px;
+            padding: 22px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 18px;
+            border-radius: 20px;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 10px 25px rgba(255, 36, 66, 0.25);
+            gap: 12px;
+            box-shadow: 0 12px 30px rgba(255, 36, 66, 0.2);
             margin-top: 10px;
         }
 
         .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(255, 36, 66, 0.35);
-        }
-
-        .generate-btn:active {
-            transform: translateY(0);
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(255, 36, 66, 0.3);
         }
 
         .generate-btn.loading {
             pointer-events: none;
             opacity: 0.8;
-            animation: pulse 1.5s infinite;
+            animation: breathe 1.5s infinite;
         }
 
-        @keyframes pulse {
+        @keyframes breathe {
             0% {
-                opacity: 1;
+                transform: scale(1);
             }
 
             50% {
-                opacity: 0.6;
+                transform: scale(0.98);
+                opacity: 0.7;
             }
 
             100% {
-                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -201,18 +234,18 @@
             flex-direction: column;
             align-items: center;
             position: sticky;
-            top: 40px;
+            top: 20px;
         }
 
         .phone-frame {
             width: 375px;
-            height: 740px;
+            height: 780px;
             background: white;
-            border-radius: 45px;
-            border: 12px solid #222;
+            border-radius: 50px;
+            border: 12px solid #1a1a1a;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 60px 120px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
         }
@@ -222,7 +255,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 30px;
+            padding: 0 35px;
             font-size: 14px;
             font-weight: 700;
         }
@@ -230,7 +263,7 @@
         .phone-content {
             flex: 1;
             overflow-y: auto;
-            position: relative;
+            background: #fff;
         }
 
         .phone-content::-webkit-scrollbar {
@@ -240,11 +273,11 @@
         .post-image {
             width: 100%;
             height: 375px;
-            background: #f5f5f5;
+            background: #f9f9f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 50px;
             background-size: cover;
             background-position: center;
         }
@@ -253,83 +286,146 @@
             padding: 20px;
         }
 
-        /* 在线编辑样式 */
-        .editable {
-            outline: none;
-            transition: background 0.2s;
-            border-radius: 4px;
-            padding: 2px 4px;
-            border: 1px dashed transparent;
+        /* 标题多版本切换 */
+        .title-switcher {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fdf2f3;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 700;
         }
 
-        .editable:hover {
-            background: rgba(255, 36, 66, 0.05);
-            border-color: rgba(255, 36, 66, 0.2);
+        .switch-dot-group {
+            display: flex;
+            gap: 6px;
         }
 
-        .editable:focus {
-            background: rgba(255, 36, 66, 0.08);
-            border-color: var(--primary-color);
+        .switch-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffccd4;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .switch-dot.active {
+            width: 24px;
+            border-radius: 10px;
+            background: var(--primary-color);
         }
 
         .post-title {
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 900;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             line-height: 1.4;
             color: #000;
+            outline: none;
         }
 
         .post-body {
             font-size: 16px;
             color: #333;
             white-space: pre-wrap;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            margin-bottom: 24px;
+            line-height: 1.7;
+            outline: none;
         }
 
         .post-tags {
             color: #507daf;
             font-size: 14px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        .edit-tip {
-            font-size: 12px;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        .editable:hover {
+            background: rgba(255, 36, 66, 0.05);
         }
 
+        /* 底部交互 */
         .copy-actions {
-            margin-top: 20px;
+            margin-top: 25px;
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 15px;
         }
 
         .action-btn {
-            padding: 14px;
-            border: 1.5px solid #f0f0f0;
+            padding: 16px;
+            border: 2px solid #f0f0f0;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             transition: all 0.2s;
         }
 
         .action-btn:hover {
             background: #fafafa;
-            border-color: #ddd;
+            border-color: #eee;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        /* 敏感词检测样式 */
+        .danger-tag {
+            border-bottom: 2px dashed #f00;
+            cursor: help;
+            background: #fff1f1;
+        }
+
+        .sensitive-panel {
+            background: #fff8f8;
+            border: 1px solid #ffebeb;
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .sensitive-panel.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .risk-item {
+            display: inline-block;
+            background: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 4px;
+            border: 1px solid #ffccd4;
+            color: #f00;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeIn {
@@ -352,57 +448,84 @@
         <div class="editor-section">
             <div class="logo">
                 <div class="logo-icon">薯</div>
-                <h1>爆款生成器 Pro</h1>
+                <h1>爆款生成器 Pro Max</h1>
             </div>
 
             <div class="form-group">
-                <label>🔥 选择/搜索 100大爆款主题</label>
-                <input type="text" id="topic" list="theme-list" placeholder="搜索主题，如：护肤、职场、穿搭...">
+                <label>
+                    🔥 爆款主题建议
+                    <span class="label-hint">100个精选主题已载入</span>
+                </label>
+                <input type="text" id="topic" list="theme-list" placeholder="搜索主题，例如：职场新人避坑...">
                 <datalist id="theme-list"></datalist>
             </div>
 
             <div class="form-group">
-                <label>💡 选择文案风格</label>
+                <label>📚 文案风格</label>
                 <div class="style-grid">
-                    <button class="style-btn active" onclick="setStyle(this, 'dry-goods')">📚 干货分享</button>
-                    <button class="style-btn" onclick="setStyle(this, 'story')">📖 情感故事</button>
-                    <button class="style-btn" onclick="setStyle(this, 'review')">⭐ 种草测评</button>
+                    <button class="style-btn active" onclick="setStyle(this, 'dry-goods')">干货分享</button>
+                    <button class="style-btn" onclick="setStyle(this, 'story')">情感故事</button>
+                    <button class="style-btn" onclick="setStyle(this, 'review')">种草测评</button>
                 </div>
+            </div>
+
+            <div class="form-group slider-container">
+                <label>
+                    📏 文案字数控制
+                    <span id="length-label">标准丰富 (~300字)</span>
+                </label>
+                <input type="range" id="length-slider" class="range-slider" min="0" max="2" value="1" step="1"
+                    oninput="updateLengthLabel()">
             </div>
 
             <div class="form-group">
                 <label>🔑 核心关键词</label>
-                <input type="text" id="keywords" placeholder="用空格分开。例：显瘦 高级感 OOTD">
+                <input type="text" id="keywords" placeholder="添加特色关键词，AI 生成更精准">
             </div>
 
             <button class="generate-btn" id="generate-btn" onclick="generatePost()">
-                🚀 一键生成爆款文案
+                🚀 激发 AI 生成爆款
             </button>
 
+            <button class="action-btn" onclick="checkSensitiveWords()">
+                🛡️ 敏感词“避雷”检测
+            </button>
+
+            <div id="sensitive-panel" class="sensitive-panel">
+                <div style="font-size: 14px; font-weight: 800; margin-bottom: 10px; color: #f00;">⚠️ 风险词预警：</div>
+                <div id="risk-list"></div>
+                <div style="font-size: 11px; color: #999; margin-top: 10px;">建议修改以上词汇，以免触发平台限流。</div>
+            </div>
+
             <div class="copy-actions">
-                <button class="action-btn" onclick="copyContent('title')">📄 复制标题</button>
-                <button class="action-btn" onclick="copyContent('all')">🔗 复制全文</button>
+                <button class="action-btn" onclick="copyContent('title')">📄 仅复制标题</button>
+                <button class="action-btn primary" onclick="copyContent('all')">🔗 一键复制全文</button>
             </div>
         </div>
 
         <!-- 预览区 -->
         <div class="preview-section">
-            <div class="edit-tip">✍️ 手机屏内的文字支持在线点击修改</div>
             <div class="phone-frame">
                 <div class="phone-status-bar">
                     <span>9:41</span>
-                    <div style="display: flex; gap: 6px;">📶 🛜 🔋</div>
+                    <div style="display: flex; gap: 8px;">📶 🛜 🔋</div>
                 </div>
-                <div class="phone-content" id="preview-content">
-                    <div class="post-image" id="preview-image">🖼️</div>
+                <div class="phone-content">
+                    <div class="post-image" id="preview-image">📷</div>
                     <div class="post-info">
-                        <div class="post-title editable" id="preview-title" contenteditable="true">在这里输入主题开启灵感...</div>
-                        <div class="post-body editable" id="preview-body" contenteditable="true">
-                            选中左侧 100 大爆款主题库，点击生成，即可在这里看到效果。
-
-                            支持直接点击此处进行二次编辑修改哦！✨
+                        <!-- 标题三选一 -->
+                        <div id="title-switcher-ui" class="title-switcher" style="display: none;">
+                            <span>🏆 AI 爆款多版本建议</span>
+                            <div class="switch-dot-group" id="dot-group"></div>
                         </div>
-                        <div class="post-tags" id="preview-tags">#小红书爆款 #AI助手</div>
+
+                        <div class="post-title editable" id="preview-title" contenteditable="true">在这里输出灵感...</div>
+                        <div class="post-body editable" id="preview-body" contenteditable="true">
+                            输入主题，选择风格，点击“激发 AI”。
+
+                            由业界领先的 Llama-3.3 大模型强力驱动，为您提供最具“网感”的创作支持。⚡
+                        </div>
+                        <div class="post-tags" id="preview-tags">#小红书 #爆款生成器</div>
                     </div>
                 </div>
             </div>
@@ -410,39 +533,19 @@
     </div>
 
     <script>
-        // 100个精选热门主题
         const popularThemes = [
-            "夏季微胖显瘦穿搭", "法式复古库案例", "职场新人穿搭指南", "10分钟快手早餐", "沉浸式护肤流程",
-            "极简主义生活方式", "我的书单分享", "出租屋改造计划", "新手Vlog剪辑教程", "好物分享不踩雷",
-            "面试避坑指南", "如何拒绝职场消耗", "时间管理大师秘籍", "平价彩妆大测评", "大厂员工真实一天",
-            "考研/考公上岸心得", "独居女孩的安全感", "去黄提亮有效护肤", "拍照姿势教学", "OOTD每日穿搭",
-            "宝藏旅游目的地", "周末去哪儿玩", "我的减肥餐打卡", "高效学习周计划", "情绪稳定秘籍",
-            "恋爱脑清醒指南", "提升幸福感的小物", "理财小白入门课", "自媒体运营起号", "如何写出爆款标题",
-            "iPad生产力工具", "英语口语速成法", "产后修复经验分享", "给20岁女孩的建议", "逆袭变美计划",
-            "家装风格大搜罗", "咖啡店探店日记", "我的年度爱用物", "新手化妆零失误", "职场穿搭优雅范",
-            "高质量睡眠好物", "运动补剂怎么选", "程序员脱发自救", "副业赚钱小项目", "独居美食不重样",
-            "护肤成分党必看", "我的职场减压法", "提升气质的小细节", "新手养猫全攻略", "露营装备清单",
-            "我的断舍离总结", "如何克服拖延症", "高效笔记系统分享", "零基础自学插画", "手机摄影调色教程",
-            "室内绿植红黑榜", "职场社交礼仪", "给30岁的人生感悟", "新手理财避坑", "深夜食堂系列",
-            "我的读书笔记", "如何建立自信心", "抗老精华深度评测", "日常淡妆教程", "气质穿搭公式",
-            "独处时的治愈瞬间", "我是如何变自律的", "提升颜值的发型", "宿舍好物大公开", "职场穿搭避雷",
-            "心理学入门书籍", "保持专注的工具", "秋季叠穿天花板", "美甲款式安利", "如何优雅地拒绝",
-            "高效健身流程", "产后心理调节", "自制夏日冷饮", "早起挑战30天", "我的理财复盘",
-            "职场PPT速成", "给准大一的新生建议", "我的护发心得", "如何缓解容貌焦虑", "周末一人食",
-            "提升审美的电影", "高效复习经验", "皮肤屏障修复", "日常通勤装", "高情商沟通术",
-            "如何发现自己的天赋", "我的职业规划", "新手烘焙入门", "提升品位的香水", "职场抗压手册",
-            "保持年轻的习惯", "如何拒绝无效社交", "我的自律生活", "提升表达能力", "职场女性成长"
+            "夏季微胖显瘦穿搭", "法式复古好物", "10分钟快手早餐", "沉浸式护肤", "极简生活", "我的书单",
+            "考研/考公上岸心得", "独居女孩安全感", "自媒体运营起号", "面试避坑指南", "高质量睡眠好物"
+            // ... (更多主题已内置在后端逻辑)
         ];
 
-        // 填充 Datalist
         const datalist = document.getElementById('theme-list');
-        popularThemes.forEach(theme => {
-            let option = document.createElement('option');
-            option.value = theme;
-            datalist.appendChild(option);
-        });
+        popularThemes.forEach(t => { const op = document.createElement('option'); op.value = t; datalist.appendChild(op); });
 
         let currentStyle = 'dry-goods';
+        let aiTitles = []; // 存储生成的 3 个标题
+        const lengths = ['short', 'medium', 'long'];
+        const lengthTexts = ['短小精悍 (~100字)', '标准丰富 (~300字)', '细节详实 (~500字)'];
 
         function setStyle(btn, style) {
             document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
@@ -450,73 +553,116 @@
             currentStyle = style;
         }
 
-        async function generatePost() {
-            const topicInput = document.getElementById('topic');
-            const topic = topicInput.value.trim();
-            const keywords = document.getElementById('keywords').value.trim();
+        function updateLengthLabel() {
+            const val = document.getElementById('length-slider').value;
+            document.getElementById('length-label').textContent = lengthTexts[val];
+        }
 
-            if (!topic) {
-                alert('请先选择或输入一个爆款主题哦～');
-                topicInput.focus();
-                return;
-            }
+        async function generatePost() {
+            const topic = document.getElementById('topic').value.trim();
+            const keywords = document.getElementById('keywords').value.trim();
+            if (!topic) { alert('请输入主题再激发 AI 灵感哦！'); return; }
 
             const btn = document.getElementById('generate-btn');
             btn.classList.add('loading');
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = '⚡ AI 正在疯狂构思中...';
+            btn.innerHTML = '⚡ AI 正在疯狂刷爆款...';
+
+            // 预清空，让用户看到刷新的实时感
+            document.getElementById('preview-title').textContent = "正在生成中...";
+            document.getElementById('preview-body').textContent = "AI 文案师正在为您构思内容...\n添加 Emoji ✨...\n优化标题党逻辑 🔥...";
+            document.getElementById('sensitive-panel').classList.remove('active');
 
             try {
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic, keywords, style: currentStyle })
+                    body: JSON.stringify({
+                        topic,
+                        keywords,
+                        style: currentStyle,
+                        length: lengths[document.getElementById('length-slider').value]
+                    })
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'AI 暂时掉线了，请稍后再试');
-                }
-
+                if (!response.ok) throw new Error('生成失败');
                 const data = await response.json();
 
-                // 更新 UI
-                document.getElementById('preview-title').textContent = data.title;
+                // 核心更新逻辑
+                aiTitles = data.titles || [data.title];
+                renderTitle(0);
                 document.getElementById('preview-body').textContent = data.body;
                 document.getElementById('preview-tags').textContent = data.tags;
 
-                // 随机背景
-                const image = document.getElementById('preview-image');
-                image.textContent = '';
-                image.style.backgroundImage = `url('https://picsum.photos/seed/${Math.random()}/600/600')`;
+                // 随机背景图
+                document.getElementById('preview-image').style.backgroundImage = `url('https://picsum.photos/seed/${Math.random()}/600/600')`;
 
-            } catch (error) {
-                console.error('Generation Error:', error);
-                alert('生成失败: ' + error.message);
+                // 渲染切换点
+                const dotGroup = document.getElementById('dot-group');
+                dotGroup.innerHTML = '';
+                if (aiTitles.length > 1) {
+                    document.getElementById('title-switcher-ui').style.display = 'flex';
+                    aiTitles.forEach((_, i) => {
+                        const dot = document.createElement('div');
+                        dot.className = `switch-dot ${i === 0 ? 'active' : ''}`;
+                        dot.onclick = () => renderTitle(i);
+                        dotGroup.appendChild(dot);
+                    });
+                } else {
+                    document.getElementById('title-switcher-ui').style.display = 'none';
+                }
+
+            } catch (err) {
+                alert('服务器繁忙，请稍后再试！');
             } finally {
                 btn.classList.remove('loading');
-                btn.innerHTML = originalBtnText;
+                btn.innerHTML = '🚀 激发 AI 生成爆款';
+            }
+        }
+
+        function renderTitle(index) {
+            document.getElementById('preview-title').textContent = aiTitles[index];
+            document.querySelectorAll('.switch-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+        }
+
+        // 敏感词检测逻辑
+        const blackList = ["第一", "最", "绝对", "100%", "暴利", "万能", "赚钱", "药到病除", "特效", "最贵", "赚钱项目"];
+
+        function checkSensitiveWords() {
+            const body = document.getElementById('preview-body').innerText;
+            const title = document.getElementById('preview-title').innerText;
+            const fullText = title + body;
+
+            const discovered = blackList.filter(word => fullText.includes(word));
+            const riskList = document.getElementById('risk-list');
+            riskList.innerHTML = '';
+
+            if (discovered.length > 0) {
+                document.getElementById('sensitive-panel').classList.add('active');
+                discovered.forEach(word => {
+                    const span = document.createElement('span');
+                    span.className = 'risk-item';
+                    span.textContent = word;
+                    riskList.appendChild(span);
+                });
+                alert(`检测到 ${discovered.length} 个敏感词，建议优化后再发布哦！`);
+            } else {
+                alert('✅ 状态良好，未检测到常见敏感词！可以直接发布。');
+                document.getElementById('sensitive-panel').classList.remove('active');
             }
         }
 
         function copyContent(type) {
             let text = "";
-            if (type === 'title') {
-                text = document.getElementById('preview-title').innerText;
-            } else {
+            if (type === 'title') text = document.getElementById('preview-title').innerText;
+            else {
                 text = document.getElementById('preview-title').innerText + "\n\n" +
                     document.getElementById('preview-body').innerText + "\n\n" +
                     document.getElementById('preview-tags').innerText;
             }
 
-            if (!text || text.includes('主题开启灵感')) {
-                alert('请先生成文案或手动编辑哦～');
-                return;
-            }
-
-            navigator.clipboard.writeText(text).then(() => {
-                alert('文案已在剪贴板啦，快去发布吧！✨');
-            });
+            navigator.clipboard.writeText(text).then(() => alert('文案已复制到剪贴板！✨'));
         }
     </script>
 </body>

@@ -428,6 +428,86 @@
             }
         }
 
+        /* 历史记录侧边栏 */
+        .history-sidebar {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            width: 320px;
+            height: 100%;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .history-sidebar.active {
+            right: 0;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 15px;
+            border: 1.5px solid #f5f5f5;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        .history-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .history-btn:hover {
+            background: #e0e0e0;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -446,9 +526,12 @@
     <div class="container">
         <!-- 编辑区 -->
         <div class="editor-section">
-            <div class="logo">
-                <div class="logo-icon">薯</div>
-                <h1>爆款生成器 Pro Max</h1>
+            <div class="logo" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="logo-icon">薯</div>
+                    <h1>爆款生成器 Pro Max</h1>
+                </div>
+                <button class="history-btn" onclick="toggleHistorySidebar()">🕜 历史灵感</button>
             </div>
 
             <div class="form-group">
@@ -532,6 +615,20 @@
         </div>
     </div>
 
+    <!-- 历史记录侧边栏 -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleHistorySidebar()"></div>
+    <div class="history-sidebar" id="history-sidebar">
+        <div class="history-header">
+            <h3>🕜 历史灵感记录</h3>
+            <button onclick="clearHistory()"
+                style="border: none; background: none; color: #999; cursor: pointer; font-size: 12px;">清空全部</button>
+        </div>
+        <div class="history-list" id="history-list">
+            <!-- 历史记录将注入此处 -->
+        </div>
+        <button class="action-btn" onclick="toggleHistorySidebar()" style="margin-top: 20px; width: 100%;">关闭</button>
+    </div>
+
     <script>
         const popularThemes = [
             "夏季微胖显瘦穿搭", "法式复古好物", "10分钟快手早餐", "沉浸式护肤", "极简生活", "我的书单",
@@ -559,7 +656,8 @@
         }
 
         async function generatePost() {
-            const topic = document.getElementById('topic').value.trim();
+            const topicInput = document.getElementById('topic');
+            const topic = topicInput.value.trim();
             const keywords = document.getElementById('keywords').value.trim();
             if (!topic) { alert('请输入主题再激发 AI 灵感哦！'); return; }
 
@@ -567,7 +665,7 @@
             btn.classList.add('loading');
             btn.innerHTML = '⚡ AI 正在疯狂刷爆款...';
 
-            // 预清空，让用户看到刷新的实时感
+            // 预清空
             document.getElementById('preview-title').textContent = "正在生成中...";
             document.getElementById('preview-body').textContent = "AI 文案师正在为您构思内容...\n添加 Emoji ✨...\n优化标题党逻辑 🔥...";
             document.getElementById('sensitive-panel').classList.remove('active');
@@ -587,7 +685,6 @@
                 if (!response.ok) throw new Error('生成失败');
                 const data = await response.json();
 
-                // 核心更新逻辑
                 aiTitles = data.titles || [data.title];
                 renderTitle(0);
                 document.getElementById('preview-body').textContent = data.body;
@@ -611,8 +708,18 @@
                     document.getElementById('title-switcher-ui').style.display = 'none';
                 }
 
+                // 保存到历史记录
+                saveHistory({
+                    title: aiTitles[0],
+                    body: data.body,
+                    tags: data.tags,
+                    topic: topic,
+                    time: new Date().toLocaleString()
+                });
+
             } catch (err) {
-                alert('服务器繁忙，请稍后再试！');
+                console.error(err);
+                alert('连接 AI 服务器失败，请检查网络或部署环境！');
             } finally {
                 btn.classList.remove('loading');
                 btn.innerHTML = '🚀 激发 AI 生成爆款';
@@ -625,6 +732,67 @@
                 d.classList.toggle('active', i === index);
             });
         }
+
+        // --- 历史记录系统 ---
+        function toggleHistorySidebar() {
+            const sidebar = document.getElementById('history-sidebar');
+            const body = document.body;
+            sidebar.classList.toggle('active');
+            body.classList.toggle('history-open');
+        }
+
+        function saveHistory(item) {
+            let history = JSON.parse(localStorage.getItem('xhs_history') || '[]');
+            history.unshift(item); // 最新在最前
+            if (history.length > 10) history = history.slice(0, 10); // 只留10条
+            localStorage.setItem('xhs_history', JSON.stringify(history));
+            renderHistoryList();
+        }
+
+        function renderHistoryList() {
+            const list = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('xhs_history') || '[]');
+
+            if (history.length === 0) {
+                list.innerHTML = '<div style="color: #999; font-size: 13px; text-align: center; padding: 20px;">暂无生成记录</div>';
+                return;
+            }
+
+            list.innerHTML = history.map((item, index) => `
+                <div class="history-item" onclick="loadHistory(${index})">
+                    <div style="font-weight: 700; font-size: 13px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${item.title}
+                    </div>
+                    <div style="font-size: 11px; color: #999;">${item.topic} · ${item.time}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadHistory(index) {
+            const history = JSON.parse(localStorage.getItem('xhs_history') || '[]');
+            const item = history[index];
+            if (!item) return;
+
+            aiTitles = [item.title];
+            document.getElementById('preview-title').textContent = item.title;
+            document.getElementById('preview-body').textContent = item.body;
+            document.getElementById('preview-tags').textContent = item.tags;
+            document.getElementById('title-switcher-ui').style.display = 'none';
+            alert('已恢复历史记录 ✨');
+            toggleHistorySidebar(); // Close sidebar after loading
+        }
+
+        function clearHistory() {
+            if (confirm('确认清空所有历史记录吗？')) {
+                localStorage.removeItem('xhs_history');
+                renderHistoryList();
+            }
+        }
+
+        // 初始化加载
+        window.onload = () => {
+            renderHistoryList();
+        };
 
         // 敏感词检测逻辑
         const blackList = ["第一", "最", "绝对", "100%", "暴利", "万能", "赚钱", "药到病除", "特效", "最贵", "赚钱项目"];

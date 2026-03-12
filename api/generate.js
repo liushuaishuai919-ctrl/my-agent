@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { topic, keywords, style, length = 'medium' } = req.body;
+  const { topic, keywords, style, length = '300' } = req.body;
 
   if (!topic) {
     return res.status(400).json({ error: '主题不能为空' });
@@ -16,9 +16,11 @@ export default async function handler(req, res) {
 
   // 根据长度滑块调整字数建议
   const lengthGuide = {
-    'short': '字数极简，约100字左右，多用短句，适合快节奏。',
-    'medium': '字数适中，约300字左右，逻辑完整，有细节有金句。',
-    'long': '详细丰富，500字以上，包含深度攻略或长篇故事。'
+    '100': '字数极简，约100字左右，核心利益点突出，适合快节奏。',
+    '200': '精简干货，约200字左右，结构清晰，去除废话。',
+    '300': '标准丰富，约300字左右，逻辑完整，有细节有金句。',
+    '400': '内容详实，约400字左右，包含较多案例或深度拆解。',
+    '500': '深度长文，约500字以上，包含完整攻略、多点论证或长篇故事。'
   };
 
   const systemPrompt = `你是一位顶级小红书文案专家，擅长创作极具吸引力的“标题党”内容。

@@ -557,7 +557,7 @@
                     📏 文案字数控制
                     <span id="length-label">标准丰富 (~300字)</span>
                 </label>
-                <input type="range" id="length-slider" class="range-slider" min="0" max="2" value="1" step="1"
+                <input type="range" id="length-slider" class="range-slider" min="0" max="4" value="2" step="1"
                     oninput="updateLengthLabel()">
             </div>
 
@@ -641,8 +641,14 @@
 
         let currentStyle = 'dry-goods';
         let aiTitles = []; // 存储生成的 3 个标题
-        const lengths = ['short', 'medium', 'long'];
-        const lengthTexts = ['短小精悍 (~100字)', '标准丰富 (~300字)', '细节详实 (~500字)'];
+        const lengths = ['100', '200', '300', '400', '500'];
+        const lengthTexts = [
+            '字数极简 (~100字)',
+            '精简干货 (~200字)',
+            '标准丰富 (~300字)',
+            '内容详实 (~400字)',
+            '深度长文 (~500字)'
+        ];
 
         function setStyle(btn, style) {
             document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));

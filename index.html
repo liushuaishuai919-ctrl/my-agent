@@ -25,6 +25,13 @@
             padding: 0;
         }
 
+        html,
+        body {
+            overflow-x: hidden;
+            /* 防止横向溢出 */
+            width: 100%;
+        }
+
         body {
             font-family: 'Noto Sans SC', sans-serif;
             background-color: var(--bg-color);
@@ -46,50 +53,51 @@
         }
 
         @media (max-width: 1000px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .preview-section {
-                order: -1;
-                position: relative;
-                top: 0;
-            }
-
-            .phone-frame {
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
 
+            .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 20px;
+            }
+
             .editor-section {
+                order: -1 !important;
+                /* 强制位居第一 */
                 padding: 25px 20px;
             }
 
-            h1 {
-                font-size: 22px;
+            .preview-section {
+                order: 1 !important;
+                /* 排在编辑器之后 */
+                position: relative !important;
+                width: 100%;
+                top: 0;
             }
 
-            /* 手机端移除装饰性的手机壳，直接满屏内容 */
             .phone-frame {
-                width: 100%;
-                height: auto;
-                border: none;
+                width: 100% !important;
+                height: auto !important;
+                min-height: 480px;
+                margin: 0;
+                border: none !important;
+                /* 移动端不需要沉重的模拟黑色边框 */
                 border-radius: 16px;
                 box-shadow: var(--shadow);
             }
 
             .phone-status-bar {
-                display: none;
+                display: none !important;
             }
 
             .post-image {
                 height: 300px;
+            }
+
+            h1 {
+                font-size: 22px;
             }
 
             .history-sidebar {
@@ -483,21 +491,23 @@
         /* 历史记录侧边栏 */
         .history-sidebar {
             position: fixed;
-            right: -320px;
+            right: 0;
             top: 0;
             width: 320px;
             height: 100%;
             background: white;
             box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+            /* 使用 transform 彻底隐藏 */
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             padding: 30px;
         }
 
         .history-sidebar.active {
-            right: 0;
+            transform: translateX(0);
         }
 
         .history-header {
@@ -572,6 +582,114 @@
                 transform: translateY(0);
             }
         }
+
+        @media (max-width: 1000px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 20px;
+            }
+
+            .editor-section {
+                order: -1 !important;
+                /* 强制位居第一 */
+                padding: 25px 20px;
+            }
+
+            .preview-section {
+                order: 1 !important;
+                /* 排在编辑器之后 */
+                position: relative !important;
+                width: 100%;
+                top: 0;
+                display: none !important;
+                /* 默认隐藏，不占用屏幕空间 */
+            }
+
+            .container.preview-active .preview-section {
+                display: flex !important;
+                /* 当生成完毕时才显示 */
+                animation: fadeIn 0.5s ease;
+                margin-top: 20px;
+                padding-bottom: 50px;
+
+                /* 给底部留出空间 */
+                .container.preview-active .editor-section {
+                    display: none !important;
+                    /* 专注模式：预览时隐藏编辑器 */
+                }
+
+                .back-edit-btn {
+                    display: flex !important;
+                    width: 100%;
+                    padding: 16px;
+                    background: white;
+                    border: 2px solid var(--primary-color);
+                    color: var(--primary-color);
+                    border-radius: 16px;
+                    font-size: 16px;
+                    font-weight: 800;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                    cursor: pointer;
+                }
+
+                .phone-frame {
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: 480px;
+                    margin: 0;
+                    border: none !important;
+                    /* 移动端不需要沉重的模拟黑色边框 */
+                    border-radius: 16px;
+                    box-shadow: var(--shadow);
+                }
+
+                .phone-status-bar {
+                    display: none !important;
+                }
+
+                .post-image {
+                    height: 300px;
+                }
+
+                h1 {
+                    font-size: 22px;
+                }
+
+                /* 防止内部按钮过宽撑开整个主容器 */
+                .style-grid {
+                    grid-template-columns: 1fr !important;
+                }
+
+                .copy-actions {
+                    grid-template-columns: 1fr !important;
+                }
+
+                .history-sidebar {
+                    width: 85%;
+                    max-width: 320px;
+                    padding: 20px;
+                    /* 再次确保彻底隐藏 */
+                    transform: translateX(100%);
+                }
+
+                .logo h1 {
+                    font-size: 18px;
+                }
+
+                .history-btn {
+                    padding: 8px;
+                    font-size: 12px;
+                }
+            }
+        }
     </style>
 </head>
 
@@ -641,6 +759,7 @@
 
         <!-- 预览区 -->
         <div class="preview-section">
+            <button class="back-edit-btn" onclick="exitPreviewMode()" style="display: none;">🔙 返回修改文案</button>
             <div class="phone-frame">
                 <div class="phone-status-bar">
                     <span>9:41</span>
@@ -732,22 +851,22 @@
             // --- 智能环境检测：本地 file:// 协议下开启 Demo 模式 ---
             if (window.location.protocol === 'file:') {
                 console.log('检测到本地环境，开启 Demo/Mock 模式');
-                await new Promise(r => setTimeout(r, 1800)); // 模拟 AI 思考动效
+                await new Promise(r => setTimeout(r, 1800));
 
                 const mocks = {
                     'sincere-pro': {
                         titles: [`🔥 避雷！${topic}千万别乱做`, `✨ 纯干货！敲重点！${topic}全攻略`, `建议收藏 | ${topic}这一篇就够了`],
-                        body: `讲真，关于【${topic}】我真的研究了很久呜呜😭 很多姐妹都直接掉坑里了！\n\n今天整理这份清单真的是压箱底了！没有任何虚头巴脑的，全是我一点点抠出来的细节细节细节！点赞收藏起来，不然刷着刷着就找不到我辣～\n\n【本地预览说明】\n已开启「人格化 Demo 模式」。部署到 Vercel 后，这里的真实 AI 文案会更有人味哦！🚀`,
+                        body: `讲真，关于【${topic}】我真的研究了很久呜呜😭 很多姐妹都直接掉坑里了！\n\n今天整理这份清单真的是压箱底了！没有任何虚头巴脑的，全是我一点点抠出来的细节细节细节！点赞收藏起来，不然刷着刷着就找不到我辣～\n\n【本地预览说明】\n已开启「人格化 Demo 模式」。`,
                         tags: `#${topic} #干货 #小红书成长`
                     },
                     'cute-chat': {
                         titles: [`啊啊啊！${topic}也太好看了吧✨`, `救命惹😭 谁懂${topic}的含金量？`, `今日份${topic}碎碎念👋`],
-                        body: `家人们！谁懂啊！！我真的哭死呜呜呜😭 今天发现的【${topic}】也太绝了吧！！✨\n\n我不允许还有姐妹不知道这个宝藏！真的是氛围感拉满了快来跟我一起分享这份快乐呀～比心心💗\n\n【本地预览说明】\n已开启「碎碎念风格」Demo。真实环境下的 AI 会用更可爱的语气陪你聊天哦！🌸`,
+                        body: `家人们！谁懂啊！！我真的哭死呜呜呜😭 今天发现的【${topic}】也太绝了吧！！✨\n\n我不允许还有姐妹不知道这个宝藏！真的是氛围感拉满了快来跟我一起分享这份快乐呀～比心心💗\n\n【本地预览说明】\n已开启「碎碎念风格」Demo。`,
                         tags: `#${topic} #我的碎碎念 #宝藏分享`
                     },
                     'spicy-review': {
                         titles: [`听我一句劝，${topic}真的别乱冲❌`, `大实话！${topic}到底值不值得？`, `拔草日记：${topic}别被营销骗了`],
-                        body: `真的无语了朋友们，写在前面：【${topic}】并不是所有人都适合！！❌\n\n别被那些营销号带节奏了，我今天就要说实话（可能有点毒舌但都是真心的）！如果你是为了跟风，那你可以划走了，不要浪费这个钱呜呜😭\n\n【本地预览说明】\n已开启「避雷针风格」Demo。真实 AI 会帮你犀利吐槽，去除所有 AI 味！🔥`,
+                        body: `真的无语了朋友们，写在前面：【${topic}】并不是所有人都适合！！❌\n\n别被那些营销号带节奏了，我今天就要说实话（可能有点毒舌但都是真心的）！如果你是为了跟风，那你可以划走了，不要浪费这个钱呜呜😭\n\n【本地预览说明】\n已开启「避雷针风格」Demo。`,
                         tags: `#${topic} #避雷 #大实话`
                     }
                 };
@@ -756,6 +875,7 @@
                 updateUIWithData(mockData, topic);
                 btn.classList.remove('loading');
                 btn.innerHTML = '🚀 激发 AI 生成爆款 (人格化Demo)';
+                document.querySelector('.container').classList.add('preview-active');
                 return;
             }
 
@@ -774,7 +894,7 @@
                 if (!response.ok) throw new Error('生成失败');
                 const data = await response.json();
                 updateUIWithData(data, topic);
-
+                document.querySelector('.container').classList.add('preview-active');
             } catch (err) {
                 console.error(err);
                 alert('连接 AI 服务器失败，请检查网络或部署环境！');
@@ -924,6 +1044,12 @@
             }
 
             navigator.clipboard.writeText(text).then(() => alert('文案已复制到剪贴板！✨'));
+        }
+
+        // 手机端退出预览模式
+        function exitPreviewMode() {
+            document.querySelector('.container').classList.remove('preview-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // 返回顶部方便继续修改
         }
     </script>
 </body>

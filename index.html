@@ -174,7 +174,7 @@
             <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px">🌟 自动推广与分享：</p>
             <div style="display:flex; gap:10px">
                 <button class="action-btn primary" style="flex:1" onclick="share('copy')">🔗 复制链接</button>
-                <button class="action-btn" style="flex:1" onclick="share('card')">📋 分享卡片</button>
+                <button class="action-btn" style="flex:1" onclick="share('card')">📋 分享预览</button>
             </div>
             <button class="action-btn" style="width:100%; margin-top:15px; border-color:#ef4444; color:#ef4444" onclick="clearH()">🗑️ 清空记录</button>
         </div>
@@ -187,8 +187,8 @@
         const NEWS_URL = '/api/news';
         let cStyle = 'sincere-pro';
         let aiTitles = [];
-        const lTexts = ['极简精炼 (~100字)','简练有力 (~200字)','标准丰富 (~300字)','详实生动 (~450字)','深度长文 (~600字)'];
-        const lKeys = ['minimal','short','medium','long','extensive'];
+        const lTexts = ['极简精炼 (~100字)','简练有力 (~200字)','标准丰富 (~300字)','详实生动 (~450字)','深度长文 (~500字)'];
+        const lKeys = ['100','200','300','400','500'];
 
         function uLength(){ document.getElementById('l-label').innerText = lTexts[document.getElementById('l-slider').value]; }
         function sStyle(b,s){ document.querySelectorAll('.style-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); cStyle=s; }
@@ -211,7 +211,16 @@
             const topic = document.getElementById('topic').value; if(!topic) return showT('请输入主题','⚠️');
             const btn = document.getElementById('gen-btn'); btn.classList.add('loading'); btn.innerText='AI 思考中...';
             try {
-                const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({topic, style:cStyle, length:lKeys[document.getElementById('l-slider').value]}) });
+                const res = await fetch(API_URL, { 
+                    method:'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    body:JSON.stringify({
+                        topic, 
+                        style:cStyle, 
+                        length:lKeys[document.getElementById('l-slider').value]
+                    }) 
+                });
+                if(!res.ok) throw await res.json();
                 const d = await res.json();
                 aiTitles = d.titles || [d.title];
                 renderT(0);
@@ -223,10 +232,11 @@
                     document.getElementById('t-sw').style.display='flex';
                     const g = document.getElementById('d-group'); g.innerHTML='';
                     aiTitles.forEach((_,i)=>{ const d=document.createElement('div'); d.className=`dot ${i===0?'active':''}`; d.onclick=()=>renderT(i); g.appendChild(d); });
-                }
+                } else { document.getElementById('t-sw').style.display='none'; }
+                
                 saveH({title:aiTitles[0], body:d.body, tags:d.tags, topic, time:new Date().toLocaleTimeString()});
                 showT('文案已就绪！','🚀');
-            } catch(e) { showT('生成失败','❌'); } finally { btn.classList.remove('loading'); btn.innerText='🚀 一键激发 AI 创作'; }
+            } catch(e) { showT(e.error || '生成失败','❌'); } finally { btn.classList.remove('loading'); btn.innerText='🚀 一键激发 AI 创作'; }
         }
 
         function renderT(idx) {
@@ -256,10 +266,10 @@
             let h=JSON.parse(localStorage.getItem('xhs_h')||'[]').find(x=>x.time===t);
             if(h){ aiTitles=[h.title]; renderT(0); document.getElementById('p-body').innerText=h.body; document.getElementById('p-tags').innerText=h.tags; tSidebar(); showT('记录已恢复'); }
         }
-        function clearH(){ if(confirm('清空？')){ localStorage.removeItem('xhs_h'); rHistory(); } }
-        function share(t){ if(t==='copy'){ navigator.clipboard.writeText(`发现一个爆款生成器！\n${window.location.href}`).then(()=>showT('已复制','📋')); } else exportI(); }
-        function copyC(){ const t=document.getElementById('p-title').innerText; const b=document.getElementById('p-body').innerText; navigator.clipboard.writeText(t+'\n\n'+b).then(()=>showT('复制成功','📋')); }
-        function checkS(){ const txt=document.getElementById('p-body').innerText; const b=["第一","最","绝对","万能"]; const f=b.filter(x=>txt.includes(x)); const p=document.getElementById('s-panel'); p.innerHTML=f.length?'⚠️ 敏感词：'+f.join(', '):'✅ 未发现敏感词'; p.style.display='block'; }
+        function clearH(){ if(confirm('清空所有历史记录？')){ localStorage.removeItem('xhs_h'); rHistory(); } }
+        function share(t){ if(t==='copy'){ navigator.clipboard.writeText(`超强 AI 爆款生成器！\n${window.location.href}`).then(()=>showT('已复制到剪贴板','📋')); } else exportI(); }
+        function copyC(){ const t=document.getElementById('p-title').innerText; const b=document.getElementById('p-body').innerText; navigator.clipboard.writeText(t+'\n\n'+b).then(()=>showT('完整内容已复制','📋')); }
+        function checkS(){ const txt=document.getElementById('p-body').innerText; const b=["第一","最","绝对","万能","100%","暴利","月入过万","兼职"]; const f=b.filter(x=>txt.includes(x)); const p=document.getElementById('s-panel'); p.innerHTML=f.length?`<span style="color:#ef4444; font-weight:800">⚠️ 发现违禁词：</span> ${f.join(', ')}`:`<span style="color:#10b981; font-weight:800">✅ 暂未发现敏感词</span>`; p.style.display='block'; }
 
         window.onload = () => { loadN(); setInterval(loadN, 600000); };
     </script>

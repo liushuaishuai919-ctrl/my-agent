@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小红书爆款生成器 Pro Max - 超强 AI 文案神器</title>
+    <title>小红书爆款生成器 Pro Max - 官方变现版</title>
     <meta name="description" content="专为小红书打造的 AI 爆款文案生成器。一键写出超有网感的干货分享、碎碎念、避雷避坑笔记。">
     <meta name="keywords" content="小红书, AI文案, 爆款标题, 自媒体工具, 文案助手, AI写作, 流量密码">
     
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://my-first-agent.vercel.app/">
-    <meta property="og:title" content="小红书爆款生成器 Pro Max - 你的私人自媒体专家">
+    <meta property="og:title" content="小红书爆款生成器 Pro Max - 超强 AI 文案神器">
     <meta property="og:description" content="3秒生成超强「网感」防限流笔记，Llama 3.3 强力驱动。">
     <meta property="og:image" content="/assets/og-image.png">
 
@@ -70,6 +70,11 @@
         .generate-btn.loading { animation: pulse 1.5s infinite; pointer-events: none; }
         @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.6; } 100% { opacity:1; } }
 
+        /* Ad Slots */
+        .ad-slot { margin: 20px 0; border: 1px dashed var(--card-border); border-radius: 12px; padding: 20px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .ad-slot:hover { border-color: var(--pro-gold); background: rgba(255,255,255,0.05); }
+        .ad-label { position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.1); font-size: 10px; padding: 2px 8px; border-bottom-left-radius: 8px; }
+
         .phone-mockup { width: 375px; height: 760px; background: #000; border-radius: 54px; padding: 12px; position: relative; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.5); overflow: hidden; }
         .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 30px; background: #000; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 10; }
         .phone-scroll { height: 100%; background: white; border-radius: 42px; overflow-y: auto; color: #333; }
@@ -101,6 +106,13 @@
         .toast.active { transform:translateX(-50%) translateY(0); }
         
         .sensitive-panel { margin-top:20px; padding:15px; background:rgba(220,38,38,0.1); border:1px solid rgba(220,38,38,0.2); border-radius:12px; display:none; }
+
+        /* Modal */
+        .modal { position:fixed; inset:0; z-index:2100; display:none; align-items:center; justify-content:center; padding:20px; }
+        .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); }
+        .modal-content { position:relative; background:rgba(255,255,255,0.1); border:1px solid var(--card-border); border-radius:24px; padding:40px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s; }
+        @keyframes zoomIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+        .qr-img { width:200px; height:200px; margin:20px auto; border-radius:12px; border:5px solid white; }
     </style>
 </head>
 <body>
@@ -111,15 +123,19 @@
             <div class="trending-marquee"><div class="trending-content" id="t-marquee">加载中...</div></div>
         </div>
         <header class="header">
-            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">3秒生成超强「网感」文案，Llama 3.3 驱动</p></div></div>
-            <button class="nav-btn" onclick="tSidebar()">🕜 收藏与分享</button>
+            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">官方商业版 | 已开启广告位集成</p></div></div>
+            <button class="nav-btn" onclick="tSidebar()">🕜 管理中心</button>
         </header>
 
         <main class="container">
             <div class="glass-panel">
+                <div class="ad-slot" onclick="openModal()">
+                    <span class="ad-label">AD 合作位-TOP</span>
+                    ✨ 投放您的品牌广告，占领流量入口
+                </div>
                 <div class="form-group">
                     <label><span>🎯 爆款笔记主题</span><span style="font-size:12px; font-weight:400">回车键快捷生成</span></label>
-                    <input type="text" id="topic" placeholder="输入你想写的主题，如：打针医美血泪教训..." onkeypress="if(event.key==='Enter')generate()">
+                    <input type="text" id="topic" placeholder="输入你想写的主题..." onkeypress="if(event.key==='Enter')generate()">
                 </div>
                 <div class="form-group">
                     <label>🎭 爆款文案风格</label>
@@ -137,11 +153,6 @@
                     <input type="range" id="l-slider" class="range-slider" min="0" max="4" value="2" oninput="uLength()">
                 </div>
                 <button class="generate-btn" id="gen-btn" onclick="generate()">🚀 一键激发 AI 创作</button>
-                <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:15px; margin-top:15px">
-                    <button class="action-btn" onclick="checkS()">🛡️ 敏感词检测</button>
-                    <button class="action-btn primary" onclick="copyC()">🔗 复制完整文案</button>
-                </div>
-                <div id="s-panel" class="sensitive-panel"></div>
             </div>
 
             <div class="preview-wrapper">
@@ -151,32 +162,49 @@
                         <img id="p-img" src="https://picsum.photos/seed/xhs/600/800" class="cover-img" alt="封面" crossorigin="anonymous">
                         <div class="post-content">
                             <div class="title-switcher" id="t-sw">
-                                <span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多个爆款标题</span>
+                                <span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多组爆款标题</span>
                                 <div class="dot-group" id="d-group"></div>
                             </div>
                             <div class="post-title" id="p-title" contenteditable="true">在这里输出灵感...</div>
-                            <div class="post-body" id="p-body" contenteditable="true">输入主题，选择风格，点击“一键激发 AI 创作”。全新升级 Pro Max 旗舰版已就绪。🚀</div>
+                            <div class="post-body" id="p-body" contenteditable="true">点击上方按钮，开启 AI 变现之旅。</div>
                             <div class="post-tags" id="p-tags" contenteditable="true">#小红书 #爆款生成器 Pro</div>
                         </div>
                     </div>
-                    <div class="exporting-overlay" id="e-overlay"><div style="font-size:30px">📸</div>正在生成长图...</div>
                 </div>
-                <button class="action-btn" style="width:100%; margin-top:20px; background:rgba(255,255,255,0.1)" onclick="exportI()">📸 导出一图流 (去 UI)</button>
+                <div class="ad-slot" onclick="openModal()" style="margin-top:20px; border-style:solid; border-color:var(--primary-color);">
+                    <span class="ad-label">AD 核心流量位</span>
+                    🚀 品牌直达，高效转化
+                </div>
+                <button class="action-btn" style="width:100%; margin-top:20px" onclick="exportI()">📸 导出高清长图</button>
             </div>
         </main>
     </div>
 
     <div class="sidebar-overlay" id="o-overlay" onclick="tSidebar()"></div>
     <div class="sidebar" id="sidebar">
-        <h2 style="font-size:22px">🕜 常用工具</h2>
+        <h2 style="font-size:22px">🕜 运营管理</h2>
+        <div class="ad-slot" onclick="openModal()" style="padding:15px; font-size:12px">
+            🌟 原生展示广告预留位
+        </div>
         <div class="history-list" id="h-list"></div>
         <div style="border-top:1px solid var(--card-border); padding-top:20px; margin-top:auto">
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px">🌟 自动推广与分享：</p>
+            <button class="action-btn primary" style="width:100%; margin-bottom:12px" onclick="openModal()">💼 商务合作 / 投放广告</button>
             <div style="display:flex; gap:10px">
-                <button class="action-btn primary" style="flex:1" onclick="share('copy')">🔗 复制链接</button>
-                <button class="action-btn" style="flex:1" onclick="share('card')">📋 分享预览</button>
+                <button class="action-btn" style="flex:1" onclick="share('copy')">🔗 链接分享</button>
+                <button class="action-btn" style="flex:1; border-color:#ef4444; color:#ef4444" onclick="clearH()">🗑️ 清空历史</button>
             </div>
-            <button class="action-btn" style="width:100%; margin-top:15px; border-color:#ef4444; color:#ef4444" onclick="clearH()">🗑️ 清空记录</button>
+        </div>
+    </div>
+
+    <!-- Business Modal -->
+    <div class="modal" id="biz-modal">
+        <div class="modal-bg" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <h2 style="margin-bottom:10px">💼 商务合作与投放</h2>
+            <p style="color:var(--text-muted); font-size:14px">扫码添加微信，开启流量变现合作</p>
+            <img src="/assets/business-qr.png" class="qr-img" alt="商务联系二维码">
+            <div style="font-size:16px; font-weight:700; color:white; margin-bottom:20px">广告合作 ID: XHS_PRO_MAX</div>
+            <button class="action-btn primary" style="width:100%" onclick="closeModal()">我知道了</button>
         </div>
     </div>
 
@@ -193,12 +221,13 @@
         function uLength(){ document.getElementById('l-label').innerText = lTexts[document.getElementById('l-slider').value]; }
         function sStyle(b,s){ document.querySelectorAll('.style-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); cStyle=s; }
         function tSidebar(){ let s=document.getElementById('sidebar'); let o=document.getElementById('o-overlay'); s.classList.toggle('active'); o.style.display=s.classList.contains('active')?'block':'none'; if(s.classList.contains('active')) rHistory(); }
-        
+        function openModal(){ document.getElementById('biz-modal').style.display='flex'; }
+        function closeModal(){ document.getElementById('biz-modal').style.display='none'; }
         function showT(m,i='✨'){ const t=document.getElementById('toast'); document.getElementById('t-msg').innerText=m; document.getElementById('t-icon').innerText=i; t.classList.add('active'); setTimeout(()=>t.classList.remove('active'), 3000); }
 
         async function loadN() {
             const m = document.getElementById('t-marquee'); 
-            const fb = ["如何快速涨粉","流量密码","2026穿搭趋势","AI创作新风口"];
+            const fb = ["AI创作下半场：如何变现","流量密码拆解","小红书商业化蓝皮书"];
             try {
                 const res = await fetch(NEWS_URL); if(!res.ok) throw 0;
                 const d = await res.json(); const items = d.items?.map(x=>x.title) || fb;
@@ -212,18 +241,11 @@
             const btn = document.getElementById('gen-btn'); btn.classList.add('loading'); btn.innerText='AI 思考中...';
             try {
                 const res = await fetch(API_URL, { 
-                    method:'POST', 
-                    headers:{'Content-Type':'application/json'}, 
-                    body:JSON.stringify({
-                        topic, 
-                        style:cStyle, 
-                        length:lKeys[document.getElementById('l-slider').value]
-                    }) 
+                    method:'POST', headers:{'Content-Type':'application/json'}, 
+                    body:JSON.stringify({topic, style:cStyle, length:lKeys[document.getElementById('l-slider').value]}) 
                 });
-                if(!res.ok) throw await res.json();
                 const d = await res.json();
-                aiTitles = d.titles || [d.title];
-                renderT(0);
+                aiTitles = d.titles || [d.title]; renderT(0);
                 typeW('p-body', d.body);
                 document.getElementById('p-tags').innerText = d.tags;
                 document.getElementById('p-img').src = `https://picsum.photos/seed/${Math.random()}/600/800`;
@@ -233,10 +255,9 @@
                     const g = document.getElementById('d-group'); g.innerHTML='';
                     aiTitles.forEach((_,i)=>{ const d=document.createElement('div'); d.className=`dot ${i===0?'active':''}`; d.onclick=()=>renderT(i); g.appendChild(d); });
                 } else { document.getElementById('t-sw').style.display='none'; }
-                
                 saveH({title:aiTitles[0], body:d.body, tags:d.tags, topic, time:new Date().toLocaleTimeString()});
-                showT('文案已就绪！','🚀');
-            } catch(e) { showT(e.error || '生成失败','❌'); } finally { btn.classList.remove('loading'); btn.innerText='🚀 一键激发 AI 创作'; }
+                showT('文案生成成功','📈');
+            } catch(e) { showT('生成失败','❌'); } finally { btn.classList.remove('loading'); btn.innerText='🚀 一键激发 AI 创作'; }
         }
 
         function renderT(idx) {
@@ -266,10 +287,8 @@
             let h=JSON.parse(localStorage.getItem('xhs_h')||'[]').find(x=>x.time===t);
             if(h){ aiTitles=[h.title]; renderT(0); document.getElementById('p-body').innerText=h.body; document.getElementById('p-tags').innerText=h.tags; tSidebar(); showT('记录已恢复'); }
         }
-        function clearH(){ if(confirm('清空所有历史记录？')){ localStorage.removeItem('xhs_h'); rHistory(); } }
-        function share(t){ if(t==='copy'){ navigator.clipboard.writeText(`超强 AI 爆款生成器！\n${window.location.href}`).then(()=>showT('已复制到剪贴板','📋')); } else exportI(); }
-        function copyC(){ const t=document.getElementById('p-title').innerText; const b=document.getElementById('p-body').innerText; navigator.clipboard.writeText(t+'\n\n'+b).then(()=>showT('完整内容已复制','📋')); }
-        function checkS(){ const txt=document.getElementById('p-body').innerText; const b=["第一","最","绝对","万能","100%","暴利","月入过万","兼职"]; const f=b.filter(x=>txt.includes(x)); const p=document.getElementById('s-panel'); p.innerHTML=f.length?`<span style="color:#ef4444; font-weight:800">⚠️ 发现违禁词：</span> ${f.join(', ')}`:`<span style="color:#10b981; font-weight:800">✅ 暂未发现敏感词</span>`; p.style.display='block'; }
+        function clearH(){ if(confirm('清空所有记录？')){ localStorage.removeItem('xhs_h'); rHistory(); } }
+        function share(t){ if(t==='copy'){ navigator.clipboard.writeText(`专业 AI 爆款生成器！\n${window.location.href}`).then(()=>showT('链接已复制','📋')); } else openModal(); }
 
         window.onload = () => { loadN(); setInterval(loadN, 600000); };
     </script>

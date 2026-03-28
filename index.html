@@ -164,6 +164,7 @@ body {
 .pro-badge {
     background: linear-gradient(90deg, #FFD700, #FFA500);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 14px;
     vertical-align: top;
@@ -325,11 +326,22 @@ input[type="text"]:focus {
 
 .range-slider {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     outline: none;
+}
+
+.trending-item {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.trending-item:hover {
+    opacity: 0.7;
+    text-decoration: underline;
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -1220,17 +1232,27 @@ function updateWordCount() {
 // --- News/Trending ---
 async function loadNews() {
     const marquee = document.getElementById('trending-marquee');
+    const fallbackItems = [
+        "如何快速涨粉", "小红书流量密码", "2026流行穿搭趋势", "AI创作新风口", 
+        "沉浸式开箱测评", "职场新人必看技巧", "五月自驾游攻略"
+    ];
+
+    const render = (items) => {
+        const html = items.map(title => 
+            `<span class="trending-item" onclick="fillTopic('${title.replace(/'/g, "\\'")}')"> &nbsp; 🔥 ${title} &nbsp; </span>`
+        ).join(' | ');
+        marquee.innerHTML = html + html; 
+    };
+
     try {
         const res = await fetch(NEWS_API_URL);
+        if (!res.ok) throw new Error('API 404');
         const data = await res.json();
-        if (data.items && data.items.length > 0) {
-            const html = data.items.map(item => ` &nbsp; 🔥 ${item.title} &nbsp; `).join(' | ');
-            marquee.innerHTML = html + html; 
-        } else {
-            marquee.innerHTML = "🔥 如何快速涨粉 | 小红书流量密码 | 2026流行穿搭趋势 | AI创作新风口";
-        }
+        render((data.items && data.items.length > 0) ? data.items.map(i => i.title) : fallbackItems);
+        console.log('热榜已刷新:', new Date().toLocaleTimeString());
     } catch (e) {
-        marquee.innerHTML = "🔥 如何快速涨粉 | 小红书流量密码 | 2026流行穿搭趋势 | AI创作新风口";
+        console.warn('热榜请求失败，使用备用数据:', e.message);
+        render(fallbackItems);
     }
 }
 
@@ -1244,6 +1266,9 @@ window.onload = () => {
         const now = new Date();
         document.getElementById('clock').textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
     }, 60000);
+
+    // Refresh news every 10 minutes
+    setInterval(loadNews, 600000);
 };
 
 // --- Supplementary Logic (Sensitive words & Refine) ---

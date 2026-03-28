@@ -81,7 +81,7 @@
         .phone-scroll::-webkit-scrollbar { width: 0; }
         .cover-img { width: 100%; height: 375px; object-fit: cover; }
         .post-content { padding: 20px; }
-        .post-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; color: #000; line-height: 1.4; }
+        .post-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; font-family: 'Noto Sans SC', sans-serif; }
         .post-body { font-size: 15px; line-height: 1.8; white-space: pre-wrap; color: #333; }
         .post-tags { font-size: 14px; color: #135bb5; margin-top: 15px; font-weight: 700; }
         
@@ -110,9 +110,11 @@
         /* Modal */
         .modal { position:fixed; inset:0; z-index:2100; display:none; align-items:center; justify-content:center; padding:20px; }
         .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); }
-        .modal-content { position:relative; background:rgba(255,255,255,0.1); border:1px solid var(--card-border); border-radius:24px; padding:40px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s; }
+        .modal-content { position:relative; background:rgba(255,255,255,0.1); border:1px solid var(--card-border); border-radius:24px; padding:30px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s; }
         @keyframes zoomIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
-        .qr-img { width:200px; height:200px; margin:20px auto; border-radius:12px; border:5px solid white; }
+        .qr-img { width:180px; height:180px; margin:20px auto; border-radius:12px; border:4px solid white; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+        .copy-chip { background:rgba(255,255,255,0.05); padding:8px 15px; border-radius:100px; border:1px solid var(--card-border); display:inline-flex; align-items:center; gap:8px; cursor:pointer; color:white; font-weight:700; margin-top:15px; transition:0.3s; }
+        .copy-chip:hover { border-color:var(--primary-color); background:rgba(255,36,66,0.1); }
     </style>
 </head>
 <body>
@@ -123,7 +125,7 @@
             <div class="trending-marquee"><div class="trending-content" id="t-marquee">加载中...</div></div>
         </div>
         <header class="header">
-            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">官方商业版 | 已开启广告位集成</p></div></div>
+            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">官方商业版 | 联系微信: tonybon919</p></div></div>
             <button class="nav-btn" onclick="tSidebar()">🕜 管理中心</button>
         </header>
 
@@ -131,12 +133,13 @@
             <div class="glass-panel">
                 <div class="ad-slot" onclick="openModal()">
                     <span class="ad-label">AD 合作位-TOP</span>
-                    ✨ 投放您的品牌广告，占领流量入口
+                    ✨ 投放您的品牌广告，分享爆款流量红利
                 </div>
                 <div class="form-group">
                     <label><span>🎯 爆款笔记主题</span><span style="font-size:12px; font-weight:400">回车键快捷生成</span></label>
                     <input type="text" id="topic" placeholder="输入你想写的主题..." onkeypress="if(event.key==='Enter')generate()">
                 </div>
+                <!-- ... Rest of UI same as V3 ... -->
                 <div class="form-group">
                     <label>🎭 爆款文案风格</label>
                     <div class="style-grid">
@@ -161,12 +164,9 @@
                     <div class="phone-scroll">
                         <img id="p-img" src="https://picsum.photos/seed/xhs/600/800" class="cover-img" alt="封面" crossorigin="anonymous">
                         <div class="post-content">
-                            <div class="title-switcher" id="t-sw">
-                                <span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多组爆款标题</span>
-                                <div class="dot-group" id="d-group"></div>
-                            </div>
+                            <div class="title-switcher" id="t-sw"><span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多组爆款标题</span><div class="dot-group" id="d-group"></div></div>
                             <div class="post-title" id="p-title" contenteditable="true">在这里输出灵感...</div>
-                            <div class="post-body" id="p-body" contenteditable="true">点击上方按钮，开启 AI 变现之旅。</div>
+                            <div class="post-body" id="p-body" contenteditable="true">AI 正在精准捕获全球爆款趋势。</div>
                             <div class="post-tags" id="p-tags" contenteditable="true">#小红书 #爆款生成器 Pro</div>
                         </div>
                     </div>
@@ -183,12 +183,12 @@
     <div class="sidebar-overlay" id="o-overlay" onclick="tSidebar()"></div>
     <div class="sidebar" id="sidebar">
         <h2 style="font-size:22px">🕜 运营管理</h2>
-        <div class="ad-slot" onclick="openModal()" style="padding:15px; font-size:12px">
-            🌟 原生展示广告预留位
+        <div class="ad-slot" onclick="openModal()" style="padding:15px; font-size:11px">
+            🌟 原生展示广告预留位 | 流量变现进行时
         </div>
         <div class="history-list" id="h-list"></div>
         <div style="border-top:1px solid var(--card-border); padding-top:20px; margin-top:auto">
-            <button class="action-btn primary" style="width:100%; margin-bottom:12px" onclick="openModal()">💼 商务合作 / 投放广告</button>
+            <button class="action-btn primary" style="width:100%; margin-bottom:12px" onclick="openModal()">💼 商务合作 / 广告投放</button>
             <div style="display:flex; gap:10px">
                 <button class="action-btn" style="flex:1" onclick="share('copy')">🔗 链接分享</button>
                 <button class="action-btn" style="flex:1; border-color:#ef4444; color:#ef4444" onclick="clearH()">🗑️ 清空历史</button>
@@ -200,11 +200,14 @@
     <div class="modal" id="biz-modal">
         <div class="modal-bg" onclick="closeModal()"></div>
         <div class="modal-content">
-            <h2 style="margin-bottom:10px">💼 商务合作与投放</h2>
-            <p style="color:var(--text-muted); font-size:14px">扫码添加微信，开启流量变现合作</p>
+            <h2 style="margin-bottom:10px">💼 商务合作</h2>
+            <p style="color:var(--text-muted); font-size:14px">扫码添加官方微信或手动搜索</p>
             <img src="/assets/business-qr.png" class="qr-img" alt="商务联系二维码">
-            <div style="font-size:16px; font-weight:700; color:white; margin-bottom:20px">广告合作 ID: XHS_PRO_MAX</div>
-            <button class="action-btn primary" style="width:100%" onclick="closeModal()">我知道了</button>
+            <div class="copy-chip" onclick="copyWechat()">
+                <span>🆔 微信号: <b>tonybon919</b></span>
+                <span>📋</span>
+            </div>
+            <p style="margin-top:20px; font-size:12px; color:var(--text-muted)">广告投放 | 平台联名 | 流量置换</p>
         </div>
     </div>
 
@@ -212,11 +215,9 @@
 
     <script>
         const API_URL = '/api/generate';
-        const NEWS_URL = '/api/news';
-        let cStyle = 'sincere-pro';
-        let aiTitles = [];
-        const lTexts = ['极简精炼 (~100字)','简练有力 (~200字)','标准丰富 (~300字)','详实生动 (~450字)','深度长文 (~500字)'];
         const lKeys = ['100','200','300','400','500'];
+        const lTexts = ['极简精炼 (~100字)','简练有力 (~200字)','标准丰富 (~300字)','详实生动 (~450字)','深度长文 (~500字)'];
+        let cStyle = 'sincere-pro'; let aiTitles = [];
 
         function uLength(){ document.getElementById('l-label').innerText = lTexts[document.getElementById('l-slider').value]; }
         function sStyle(b,s){ document.querySelectorAll('.style-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); cStyle=s; }
@@ -224,13 +225,14 @@
         function openModal(){ document.getElementById('biz-modal').style.display='flex'; }
         function closeModal(){ document.getElementById('biz-modal').style.display='none'; }
         function showT(m,i='✨'){ const t=document.getElementById('toast'); document.getElementById('t-msg').innerText=m; document.getElementById('t-icon').innerText=i; t.classList.add('active'); setTimeout(()=>t.classList.remove('active'), 3000); }
+        function copyWechat(){ navigator.clipboard.writeText('tonybon919').then(()=>showT('微信号已复制到剪贴板','✅')); }
 
         async function loadN() {
             const m = document.getElementById('t-marquee'); 
-            const fb = ["AI创作下半场：如何变现","流量密码拆解","小红书商业化蓝皮书"];
+            const fb = ["AI营销新风向","零碎时间变现攻略","自媒体爆款逻辑拆解"];
             try {
-                const res = await fetch(NEWS_URL); if(!res.ok) throw 0;
-                const d = await res.json(); const items = d.items?.map(x=>x.title) || fb;
+                const res = await fetch('/api/news'); const d = await res.json();
+                const items = d.items?.map(x=>x.title) || fb;
                 const h = items.map(t=>`<span class="trending-item" onclick="document.getElementById('topic').value='${t}'"> &nbsp; 🔥 ${t} &nbsp; </span>`).join(' | ');
                 m.innerHTML = h + h;
             } catch(e) { m.innerHTML = fb.map(t=>`<span class="trending-item" onclick="document.getElementById('topic').value='${t}'"> &nbsp; 🔥 ${t} &nbsp; </span>`).join(' | '); }
@@ -238,58 +240,37 @@
 
         async function generate() {
             const topic = document.getElementById('topic').value; if(!topic) return showT('请输入主题','⚠️');
-            const btn = document.getElementById('gen-btn'); btn.classList.add('loading'); btn.innerText='AI 思考中...';
+            const btn = document.getElementById('gen-btn'); btn.classList.add('loading'); btn.innerText='AI 计算中...';
             try {
-                const res = await fetch(API_URL, { 
-                    method:'POST', headers:{'Content-Type':'application/json'}, 
-                    body:JSON.stringify({topic, style:cStyle, length:lKeys[document.getElementById('l-slider').value]}) 
-                });
+                const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({topic, style:cStyle, length:lKeys[document.getElementById('l-slider').value]}) });
                 const d = await res.json();
                 aiTitles = d.titles || [d.title]; renderT(0);
-                typeW('p-body', d.body);
-                document.getElementById('p-tags').innerText = d.tags;
+                typeW('p-body', d.body); document.getElementById('p-tags').innerText = d.tags;
                 document.getElementById('p-img').src = `https://picsum.photos/seed/${Math.random()}/600/800`;
-                
                 if(aiTitles.length > 1) {
                     document.getElementById('t-sw').style.display='flex';
                     const g = document.getElementById('d-group'); g.innerHTML='';
                     aiTitles.forEach((_,i)=>{ const d=document.createElement('div'); d.className=`dot ${i===0?'active':''}`; d.onclick=()=>renderT(i); g.appendChild(d); });
                 } else { document.getElementById('t-sw').style.display='none'; }
                 saveH({title:aiTitles[0], body:d.body, tags:d.tags, topic, time:new Date().toLocaleTimeString()});
-                showT('文案生成成功','📈');
+                showT('文案生成成功','🚀');
             } catch(e) { showT('生成失败','❌'); } finally { btn.classList.remove('loading'); btn.innerText='🚀 一键激发 AI 创作'; }
         }
 
-        function renderT(idx) {
-            document.getElementById('p-title').innerText = aiTitles[idx];
-            document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active', i===idx));
-        }
-
-        function typeW(id,text) {
-            const el = document.getElementById(id); el.innerText=""; let i=0;
-            const timer = setInterval(()=>{ if(i<text.length){ el.innerText+=text.charAt(i); i++; } else clearInterval(timer); }, 10);
-        }
-
+        function renderT(idx) { document.getElementById('p-title').innerText = aiTitles[idx]; document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active', i===idx)); }
+        function typeW(id,text) { const el = document.getElementById(id); el.innerText=""; let i=0; const timer = setInterval(()=>{ if(i<text.length){ el.innerText+=text.charAt(i); i++; } else clearInterval(timer); }, 10); }
         async function exportI() {
             const o = document.getElementById('e-overlay'); o.style.display='flex';
-            try {
-                const c = await html2canvas(document.getElementById('target'), {scale:2, useCORS:true, backgroundColor:'#fff'});
-                const l = document.createElement('a'); l.download=`爆款笔记_${Date.now()}.png`; l.href=c.toDataURL(); l.click();
-            } catch(e) { showT('导出失败','❌'); } finally { o.style.display='none'; }
+            try { const c = await html2canvas(document.getElementById('target'), {scale:2, useCORS:true, backgroundColor:'#fff'}); const l = document.createElement('a'); l.download=`爆款笔记_${Date.now()}.png`; l.href=c.toDataURL(); l.click(); } catch(e) { showT('导出失败','❌'); } finally { o.style.display='none'; }
         }
-
         function saveH(i){ let h=JSON.parse(localStorage.getItem('xhs_h')||'[]'); h.unshift(i); localStorage.setItem('xhs_h', JSON.stringify(h.slice(0,20))); }
-        function rHistory() {
-            const l = document.getElementById('h-list'); let h=JSON.parse(localStorage.getItem('xhs_h')||'[]');
-            l.innerHTML = h.length?h.map(x=>`<div class="history-item" onclick="loadH('${x.time}')"><b>${x.title}</b><br><small>${x.time}</small></div>`).join(''):'无记录';
-        }
+        function rHistory() { const l = document.getElementById('h-list'); let h=JSON.parse(localStorage.getItem('xhs_h')||'[]'); l.innerHTML = h.length?h.map(x=>`<div class="history-item" onclick="loadH('${x.time}')"><b>${x.title}</b><br><small>${x.time}</small></div>`).join(''):'无记录'; }
         function loadH(t){
             let h=JSON.parse(localStorage.getItem('xhs_h')||'[]').find(x=>x.time===t);
             if(h){ aiTitles=[h.title]; renderT(0); document.getElementById('p-body').innerText=h.body; document.getElementById('p-tags').innerText=h.tags; tSidebar(); showT('记录已恢复'); }
         }
         function clearH(){ if(confirm('清空所有记录？')){ localStorage.removeItem('xhs_h'); rHistory(); } }
         function share(t){ if(t==='copy'){ navigator.clipboard.writeText(`专业 AI 爆款生成器！\n${window.location.href}`).then(()=>showT('链接已复制','📋')); } else openModal(); }
-
         window.onload = () => { loadN(); setInterval(loadN, 600000); };
     </script>
 </body>

@@ -6,1009 +6,696 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小红书爆款生成器 Pro Max - 超强 AI 文案神器</title>
     <meta name="description" content="专为小红书打造的 AI 爆款文案生成器。一键写出超有网感的干货分享、碎碎念、避雷避坑笔记。">
+    
     <!-- Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
     <!-- html2canvas for image export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root {
-            --primary-color: #FF2442;
-            --primary-hover: #e51f38;
-            --pro-gold: #FFD700;
-            --bg-color: #0f0c29;
-            --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --text-main: #1a1a1a;
-            --text-secondary: #666;
-            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.15);
-            --radius-xl: 24px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 20px 0;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Particles animation background */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
-        .particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-
-            100% {
-                transform: translateY(-100px) scale(1);
-                opacity: 0;
-            }
-        }
-
-        .layout-wrapper {
-            max-width: 1280px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 0 20px;
-        }
-
-        /* Top Banner & Header */
-        .trending-banner {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            font-size: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-
-        .trending-tag {
-            background: var(--primary-color);
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .trending-marquee {
-            flex: 1;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .trending-content {
-            display: inline-block;
-            animation: marquee 30s linear infinite;
-        }
-
-        .trending-item {
-            margin-right: 40px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .trending-item:hover {
-            color: var(--pro-gold);
-            text-decoration: underline;
-        }
-
-        @keyframes marquee {
-            0% {
-                transform: translateX(100%);
-            }
-
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .logo-wrap {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #FF2442, #ff7e8d);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 900;
-            font-size: 28px;
-            box-shadow: 0 10px 20px rgba(255, 36, 66, 0.3);
-        }
-
-        .logo-text h1 {
-            color: white;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-text p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .pro-badge {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 800;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Main Container */
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 420px;
-            gap: 40px;
-        }
-
-        /* Glass Panel */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            padding: 35px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 15px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .label-hint {
-            font-weight: 500;
-            font-size: 13px;
-            color: var(--primary-color);
-            background: var(--primary-light, #ffebed);
-            padding: 2px 8px;
-            border-radius: 8px;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 18px;
-            border: 2px solid #edeff2;
-            border-radius: 16px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background: #f8fafc;
-            font-family: inherit;
-        }
-
-        input:focus,
-        textarea:focus {
-            border-color: var(--primary-color);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255, 36, 66, 0.1);
-            outline: none;
-        }
-
-        /* Quick Tags */
-        .quick-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tag-chip {
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tag-chip:hover {
-            background: #e0e7ff;
-            color: #4338ca;
-            border-color: #c7d2fe;
-            transform: scale(1.05);
-        }
-
-        /* Style Grid */
-        .style-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .style-btn {
-            padding: 16px 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 700;
-            transition: all 0.2s;
-            color: #475569;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .style-icon {
-            font-size: 24px;
-        }
-
-        .style-btn:hover {
-            border-color: #cbd5e1;
-            background: #f8fafc;
-            transform: translateY(-2px);
-        }
-
-        .style-btn.active {
-            border-color: var(--primary-color);
-            background: #fff5f6;
-            color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(255, 36, 66, 0.1);
-        }
-
-        /* Slider */
-        .range-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: #e2e8f0;
-            outline: none;
-            margin: 15px 0;
-        }
-
-        .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(255, 36, 66, 0.4);
-            border: 4px solid white;
-        }
-
-        /* Generate Button */
-        .generate-btn {
-            width: 100%;
-            padding: 22px;
-            background: linear-gradient(135deg, #FF2442, #ff5b71);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 18px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(255, 36, 66, 0.3);
-            margin-top: 10px;
-        }
-
-        .generate-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-            transform: skewX(-20deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            100% {
-                left: 200%;
-            }
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 36, 66, 0.4);
-        }
-
-        .generate-btn.loading {
-            opacity: 0.8;
-            pointer-events: none;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(0.98);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Actions Grid */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            padding: 16px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-            color: #334155;
-        }
-
-        .action-btn:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            transform: translateY(-2px);
-        }
-
-        .action-btn.primary {
-            background: #1a1a1a;
-            color: white;
-            border-color: #1a1a1a;
-        }
-
-        .action-btn.primary:hover {
-            background: #333;
-        }
-
-        /* Sensitive Panel */
-        .sensitive-panel {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            padding: 20px;
-            border-radius: 16px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .sensitive-panel.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .risk-item {
-            display: inline-block;
-            background: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin: 4px;
-            border: 1px solid #fca5a5;
-            color: #dc2626;
-            font-weight: 600;
-        }
-
-        .danger-tag {
-            background: rgba(220, 38, 38, 0.1);
-            border-bottom: 2px dashed #dc2626;
-            color: #dc2626;
-        }
-
-        /* Ai Refine Panel */
-        .refine-panel {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            padding: 20px;
-            border-radius: 16px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .refine-panel.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .refine-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .refine-btn {
-            background: white;
-            border: 1px solid #86efac;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #166534;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .refine-btn:hover {
-            background: #dcfce7;
-            transform: translateY(-2px);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1a1a1a;
-            color: white;
-            padding: 16px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* Phone Preview */
-        .preview-wrapper {
-            perspective: 1000px;
-            position: sticky;
-            top: 40px;
-        }
-
-        .phone-mockup {
-            width: 380px;
-            height: 780px;
-            background: white;
-            border-radius: 50px;
-            border: 14px solid #1a1a1a;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 20px 30px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
-            display: flex;
-            flex-direction: column;
-            transform: rotateY(-5deg) rotateX(2deg);
-            transition: transform 0.5s ease;
-        }
-
-        .phone-mockup:hover {
-            transform: rotateY(0deg) rotateX(0deg);
-        }
-
-        .phone-notch {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 25px;
-            background: #1a1a1a;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            z-index: 10;
-        }
-
-        .phone-status {
-            height: 44px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px;
-            font-size: 14px;
-            font-weight: 700;
-            position: absolute;
-            width: 100%;
-            top: 0;
-            z-index: 5;
-        }
-
-        .phone-scroll {
-            flex: 1;
-            overflow-y: auto;
-            background: #fff;
-            padding-bottom: 20px;
-        }
-
-        .phone-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .cover-img-wrap {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background: #f1f5f9;
-            overflow: hidden;
-        }
-
-        .cover-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: filter 0.3s;
-        }
-
-        .cover-filters {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            display: flex;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 6px;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-        }
-
-        .filter-btn {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .filter-btn:hover {
-            transform: scale(1.2);
-        }
-
-        .post-content {
-            padding: 20px;
-        }
-
-        .author-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .author-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e2e8f0;
-        }
-
-        .author-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .title-switcher {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #fff5f6;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            color: var(--primary-color);
-            font-weight: 700;
-            border: 1px solid #ffd1d9;
-        }
-
-        .dot-group {
-            display: flex;
-            gap: 6px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ffccd4;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .dot.active {
-            width: 20px;
-            border-radius: 10px;
-            background: var(--primary-color);
-        }
-
-        .post-title {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            line-height: 1.4;
-            color: #1a1a1a;
-            outline: none;
-        }
-
-        .post-body {
-            font-size: 15px;
-            color: #333;
-            white-space: pre-wrap;
-            margin-bottom: 15px;
-            line-height: 1.8;
-            outline: none;
-        }
-
-        .post-tags {
-            color: #135bb5;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .editable:hover {
-            background: rgba(255, 36, 66, 0.05);
-            border-radius: 4px;
-        }
-
-        /* Typewriter effect span */
-        .cursor-blink {
-            border-right: 2px solid var(--primary-color);
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink {
-            50% {
-                border-color: transparent;
-            }
-        }
-
-        .bottom-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            border-top: 1px solid #f1f5f9;
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        .action-icons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .icon {
-            cursor: pointer;
-        }
-
-        /* Export overlay */
-        .exporting-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.9);
-            z-index: 20;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 360px;
-            height: 100%;
-            background: white;
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            padding: 30px;
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #edeff2;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box:focus {
-            border-color: var(--primary-color);
-        }
-
-        .history-list {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .history-card {
-            padding: 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .history-card:hover {
-            border-color: var(--primary-color);
-            background: #fff5f6;
-            transform: translateY(-2px);
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 30px;
-        }
-
-        .card-meta {
-            font-size: 12px;
-            color: #94a3b8;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .star-btn {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            color: #cbd5e1;
-            font-size: 18px;
-        }
-
-        .star-btn.active {
-            color: var(--pro-gold);
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            padding-bottom: 30px;
-        }
-
-        .footer a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            margin: 0 10px;
-            transition: color 0.2s;
-        }
-
-        .footer a:hover {
-            color: white;
-            text-decoration: underline;
-        }
-
-        @media (max-width: 1000px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .preview-wrapper {
-                perspective: none;
-            }
-
-            .phone-mockup {
-                width: 100%;
-                transform: none;
-                box-shadow: var(--shadow-lg);
-                border-radius: 30px;
-                border-width: 8px;
-            }
-
-            .phone-mockup:hover {
-                transform: none;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-
-            .nav-actions {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .style-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+/* 
+   Xiaohongshu Pro Max - Modern UI Design System 
+   Theme: Galactic Night (Deep Purple Gradients)
+   Effect: Glassmorphism (Backdrop Blur)
+*/
+
+:root {
+    /* Color Palette */
+    --primary-color: #FF2442;
+    --primary-hover: #e51f38;
+    --primary-glow: rgba(255, 36, 66, 0.4);
+    --pro-gold: #FFD700;
+    --pro-gold-glow: rgba(255, 215, 0, 0.3);
+    
+    /* Backgrounds */
+    --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --card-bg: rgba(255, 255, 255, 0.08); /* Translucent for glass effect */
+    --card-border: rgba(255, 255, 255, 0.12);
+    
+    /* Text */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --text-dark: #1e293b;
+    
+    /* Effects */
+    --glass-blur: blur(16px);
+    --shadow-main: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Particles Background */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.layout-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Banner */
+.trending-banner {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 10px 20px;
+    margin-bottom: 30px;
+    backdrop-filter: var(--glass-blur);
+}
+
+.trending-tag {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+
+.trending-marquee {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.trending-content {
+    display: inline-block;
+    animation: marquee 30s linear infinite;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 0 10px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    font-weight: 900;
+    box-shadow: 0 10px 25px var(--primary-glow);
+}
+
+.logo-text h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.pro-badge {
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 14px;
+    vertical-align: top;
+    font-weight: 900;
+}
+
+.logo-text p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.nav-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 700;
+    backdrop-filter: var(--glass-blur);
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Main Container */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    .preview-wrapper {
+        order: -1;
+    }
+}
+
+/* Glass Panels */
+.glass-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-main);
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-group label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-muted);
+}
+
+.label-hint {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+input[type="text"] {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid var(--card-border);
+    padding: 18px 20px;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+/* Quick Tags */
+.quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.tag-chip {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-muted);
+}
+
+.tag-chip:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Style Grid */
+.style-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.style-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.style-icon {
+    font-size: 24px;
+}
+
+.style-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.style-btn.active {
+    background: rgba(255, 36, 66, 0.15);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Range Slider */
+.slide-container {
+    padding: 10px 0;
+}
+
+.range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* Buttons */
+.generate-btn {
+    width: 100%;
+    padding: 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    box-shadow: 0 15px 35px var(--primary-glow);
+}
+
+.generate-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    filter: brightness(1.1);
+}
+
+.generate-btn.loading {
+    animation: pulse 1.5s infinite;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.98); opacity: 0.7; }
+    100% { transform: scale(1); }
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.action-btn {
+    padding: 16px;
+    background: transparent;
+    border: 1.5px solid var(--card-border);
+    border-radius: var(--radius-md);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-muted);
+}
+
+.action-btn.primary {
+    background: white;
+    color: #1e293b;
+    border: none;
+}
+
+.action-btn.primary:hover {
+    background: #f1f5f9;
+}
+
+/* Panels */
+.sensitive-panel, .refine-panel {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.sensitive-panel { background: rgba(220, 38, 38, 0.1); border: 1px solid rgba(220, 38, 38, 0.2); }
+.refine-panel { background: rgba(22, 101, 52, 0.1); border: 1px solid rgba(22, 101, 52, 0.2); }
+
+.refine-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.refine-btn {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.refine-btn:hover {
+    background: #15803d;
+    border-color: #15803d;
+}
+
+/* Phone Mockup 3D Style */
+.preview-wrapper {
+    position: sticky;
+    top: 40px;
+}
+
+.phone-mockup {
+    width: 375px;
+    height: 760px;
+    background: #000;
+    border-radius: 54px;
+    padding: 12px;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 2px 2px rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+
+.phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 30px;
+    background: #000;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 10;
+}
+
+.phone-status {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+}
+
+.phone-scroll {
+    height: calc(100% - 44px);
+    background: white;
+    border-radius: 42px;
+    overflow-y: auto;
+    color: #1a1a1a;
+}
+
+.phone-scroll::-webkit-scrollbar { width: 0; }
+
+.cover-img-wrap {
+    width: 100%;
+    height: 375px;
+    background: #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.5s ease;
+}
+
+.cover-filters {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+
+.filter-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.post-content {
+    padding: 20px;
+}
+
+.title-switcher {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff5f6;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ffe4e6;
+}
+
+.title-switcher span { color: var(--primary-color); font-weight: 800; font-size: 13px; }
+
+.dot-group { display: flex; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #ffccd4; cursor: pointer; }
+.dot.active { width: 24px; border-radius: 10px; background: var(--primary-color); }
+
+.post-title { font-size: 19px; font-weight: 900; line-height: 1.4; margin-bottom: 12px; color: #000; }
+.post-body { font-size: 15px; line-height: 1.8; color: #333; white-space: pre-wrap; margin-bottom: 20px; }
+.post-tags { font-size: 14px; color: #135bb5; font-weight: 500; }
+
+.bottom-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 10px;
+}
+
+.author-bar { display: flex; align-items: center; gap: 10px; }
+.author-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; }
+.author-name { font-size: 13px; font-weight: 700; color: #333; }
+.action-icons { display: flex; gap: 15px; font-size: 13px; color: #64748b; font-weight: 700; }
+
+/* Export Overlay */
+.exporting-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    color: white;
+    font-weight: 800;
+    border-radius: 42px;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 400px;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(25px);
+    border-left: 1px solid var(--card-border);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.active { transform: translateX(0); }
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    padding: 14px 18px;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-color);
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    display: none;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: white;
+    color: #1e293b;
+    padding: 16px 30px;
+    border-radius: 100px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    z-index: 2000;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast.active { transform: translateX(-50%) translateY(0); }
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 60px 0 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer a:hover { color: white; text-decoration: underline; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
     </style>
 </head>
 
-"""
-FINAL DEFINITIVE FIX:
-- Keep: bytes 0 to end of </head> line (CSS is perfect)
-- Rebuild: entire <body>...</body> HTML structure (it's corrupted beyond repair)
-- Keep: <script>...</script> JS section (it's perfect)
-"""
-import os
-
-with open('d:/MyFirstAgent/index.html', 'rb') as f:
-    raw = f.read()
-
-# 1. Find the end of the </head> line
-head_tag = b'</head>'
-head_pos = raw.find(head_tag)
-head_line_end = raw.find(b'\n', head_pos) + 1
-css_head = raw[:head_line_end]
-print(f"CSS head: {len(css_head)} bytes, ends with: {css_head[-30:]}")
-
-# 2. Find the <script> tag and everything after it
-script_tag = b'    <script>'
-script_pos = raw.rfind(script_tag)  # last occurrence
-js_tail = raw[script_pos:]
-print(f"JS tail: {len(js_tail)} bytes, starts with: {js_tail[:30]}")
-
-# 3. Build the complete HTML body
-body_html = """
 <body>
     <!-- Particles Background -->
     <div class="particles" id="particles"></div>
@@ -1262,439 +949,376 @@ body_html = """
         <span id="toast-msg">操作成功</span>
     </div>
     <!-- Scripts -->
-
     <script>
-// Data & State
-let currentStyle = 'sincere-pro';
-let aiTitles = [];
-let currentFilter = 'all';
-const lengths = ['100', '200', '300', '400', '500'];
-const lengthTexts = ['字数极简 (~100字)', '精简干货 (~200字)', '标准丰富 (~300字)', '内容详实 (~400字)', '深度长文 (~500字)'];
-const blackList = ["第一", "最", "绝对", "100%", "暴利", "万能", "赚钱", "药到病除", "特效", "最贵", "包治百病", "全网独家", "国家级", "世界级", "顶级", "极品", "无可替代", "唯一", "神器", "百分之百"]; // 扩充敏感词
+/*
+   Xiaohongshu Pro Max - Core Logic
+   Includes: AI Generation, Style Management, Long Image Export, History Persistence
+*/
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    initParticles();
-    loadTrending();
-    renderHistoryList();
-    updateClock();
-    setInterval(updateClock, 60000);
-    updateWordCount();
+// --- Constants & State ---
+const API_URL = '/api/generate';
+const NEWS_API_URL = '/api/news';
+let currentStyle = 'sincere-pro'; 
+let aiTitles = []; 
+let currentTitleIndex = 0;
 
-    // Editor listeners
-    document.getElementById('preview-body').addEventListener('input', updateWordCount);
-    document.getElementById('preview-title').addEventListener('input', updateWordCount);
-});
+// Style Definitions
+const styleNames = {
+    'sincere-pro': '📚 纯干货(认真版)',
+    'cute-chat': '🧸 碎碎念(可爱版)',
+    'spicy-review': '⚡ 避雷针(毒舌版)',
+    'emotional-story': '📖 情感故事(共鸣版)',
+    'plant-grass': '🌱 疯狂种草(安利版)',
+    'vs-review': '⚖️ 硬核测评(对比版)'
+};
 
-// UI Interactions
+const lengthTexts = [
+    '极简精炼 (~100字)',
+    '简练有力 (~200字)',
+    '标准丰富 (~300字)',
+    '详实生动 (~450字)',
+    '深度长文 (~600字)'
+];
+const lengthKeys = ['minimal', 'short', 'medium', 'long', 'extensive'];
+
+// --- UI Initialization ---
+function updateLengthLabel() {
+    const val = document.getElementById('length-slider').value;
+    document.getElementById('length-label').textContent = lengthTexts[val];
+}
+
 function setStyle(btn, style) {
     document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentStyle = style;
 }
 
-function updateLengthLabel() {
-    const val = document.getElementById('length-slider').value;
-    document.getElementById('length-label').textContent = lengthTexts[val];
-}
-
 function fillTopic(text) {
     document.getElementById('topic').value = text;
-    showToast('已填入话题: ' + text);
 }
 
 function handleEnter(e) {
     if (e.key === 'Enter') generatePost();
 }
 
-function showToast(msg, icon = '✨', duration = 3000) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-icon').textContent = icon;
-    document.getElementById('toast-msg').textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), duration);
+// --- AI Generation ---
+async function generatePost() {
+    const topic = document.getElementById('topic').value.trim();
+    const keywords = document.getElementById('keywords').value.trim();
+    const lengthVal = document.getElementById('length-slider').value;
+    
+    if (!topic) return showToast('请输入你想写的主题！', '⚠️');
+
+    const btn = document.getElementById('generate-btn');
+    btn.classList.add('loading');
+    btn.innerHTML = '⚡ AI 正在深度思考中...';
+    
+    // Reset preview
+    document.getElementById('preview-title').textContent = "正在生成爆款标题...";
+    document.getElementById('preview-body').textContent = "正在构思文案框架...\n注入情绪价值 ✨...\n添加地道 Emoji 🔥...";
+    document.getElementById('sensitive-panel').style.display = 'none';
+    document.getElementById('refine-panel').style.display = 'none';
+    document.getElementById('title-switcher-ui').style.display = 'none';
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic,
+                keywords,
+                style: currentStyle,
+                length: lengthKeys[lengthVal]
+            })
+        });
+
+        if (!response.ok) throw new Error('Generation Failed');
+        const data = await response.json();
+
+        // Handle Titles
+        aiTitles = data.titles || [data.title];
+        renderTitle(0);
+        
+        // Handle Body & Tags
+        typeWriterEffect('preview-body', data.body);
+        document.getElementById('preview-tags').textContent = data.tags;
+
+        // Random Cover Image
+        document.getElementById('preview-image').src = `https://picsum.photos/seed/${Math.random()}/600/800`;
+        
+        // Show Switcher if multiple titles
+        if (aiTitles.length > 1) {
+            document.getElementById('title-switcher-ui').style.display = 'flex';
+            const dotGroup = document.getElementById('dot-group');
+            dotGroup.innerHTML = '';
+            aiTitles.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = () => renderTitle(i);
+                dotGroup.appendChild(dot);
+            });
+        }
+
+        // Show Panels
+        document.getElementById('refine-panel').style.display = 'block';
+        showToast('文案已就绪，快去看看吧！', '🚀');
+
+        // Persistence
+        saveToHistory({
+            title: aiTitles[0],
+            body: data.body,
+            tags: data.tags,
+            topic: topic,
+            style: currentStyle,
+            time: new Date().toLocaleTimeString()
+        });
+
+    } catch (err) {
+        console.error(err);
+        showToast('连接 AI 失败，请确认 API 密钥已配置', '❌');
+    } finally {
+        btn.classList.remove('loading');
+        btn.innerHTML = '🚀 一键激发 AI 创作';
+    }
 }
 
-function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+function renderTitle(idx) {
+    currentTitleIndex = idx;
+    document.getElementById('preview-title').textContent = aiTitles[idx];
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
 }
 
-function updateWordCount() {
-    const text = document.getElementById('preview-body').innerText + document.getElementById('preview-title').innerText;
-    const count = text.replace(/\s/g, '').length;
-    document.getElementById('word-count-display').textContent = '字数统计：' + count + ' 字';
+function typeWriterEffect(elementId, text) {
+    const el = document.getElementById(elementId);
+    el.textContent = "";
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            // Scroll preview while typing
+            const scrollArea = document.querySelector('.phone-scroll');
+            scrollArea.scrollTop = scrollArea.scrollHeight;
+        } else {
+            clearInterval(interval);
+        }
+    }, 10);
 }
 
-// Image Filter
-function setFilter(filter) {
-    document.getElementById('preview-image').style.filter = filter !== 'none' ? filter : '';
-    showToast('已应用滤镜效果', '🎨', 2000);
-}
-
-// Export Image (去 UI 一图流)
+// --- Image Export ---
 async function exportImage() {
     const overlay = document.getElementById('export-overlay');
     overlay.style.display = 'flex';
 
     try {
-        // 获取当前内容
-        const titleText = document.getElementById('preview-title').innerText;
-        const bodyHTML = document.getElementById('preview-body').innerHTML;
-        const tagsText = document.getElementById('preview-tags').innerText;
-        const imgSrc = document.getElementById('preview-image').src;
-        const imgFilter = document.getElementById('preview-image').style.filter || '';
-        const authorName = document.querySelector('.author-name').textContent;
-        const authorAvatar = document.querySelector('.author-avatar').style.backgroundImage;
-
-        // 创建纯内容容器（去掉手机壳 UI）
-        const container = document.createElement('div');
-        container.style.cssText = `
-            position: fixed; left: -9999px; top: 0;
-            width: 420px; background: #fff;
-            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
-            overflow: hidden; border-radius: 0;
-        `;
-
-        // 尝试将外部图片转为 base64 以规避 CORS
-        let imgDataUrl = '';
-        try {
-            const imgEl = document.getElementById('preview-image');
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = imgEl.naturalWidth || 600;
-            tempCanvas.height = imgEl.naturalHeight || 800;
-            const ctx = tempCanvas.getContext('2d');
-            if (imgFilter) {
-                ctx.filter = imgFilter;
-            }
-            ctx.drawImage(imgEl, 0, 0, tempCanvas.width, tempCanvas.height);
-            imgDataUrl = tempCanvas.toDataURL('image/png');
-        } catch (corsErr) {
-            console.warn('封面图 CORS 限制，使用渐变替代', corsErr);
-        }
-
-        container.innerHTML = `
-            <div style="width:100%; height:420px; overflow:hidden; position:relative;">
-                ${imgDataUrl
-                    ? `<img src="${imgDataUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" crossorigin="anonymous"/>`
-                    : `<div style="width:100%; height:100%; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fdfcfb 100%);"></div>`
-                }
-            </div>
-            <div style="padding: 24px 20px 20px;">
-                <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
-                    <div style="width:32px; height:32px; border-radius:50%; background:#e2e8f0; background-image:${authorAvatar}; background-size:cover; flex-shrink:0;"></div>
-                    <span style="font-size:14px; font-weight:700; color:#333;">${authorName}</span>
-                </div>
-                <div style="font-size:18px; font-weight:800; margin-bottom:14px; line-height:1.4; color:#1a1a1a;">${titleText}</div>
-                <div style="font-size:15px; color:#333; white-space:pre-wrap; line-height:1.8; margin-bottom:16px;">${bodyHTML}</div>
-                <div style="color:#135bb5; font-size:14px; font-weight:500; padding-bottom:8px;">${tagsText}</div>
-            </div>
-        `;
-
-        document.body.appendChild(container);
-
-        // 等待图片加载完毕
-        const inlineImg = container.querySelector('img');
-        if (inlineImg) {
-            await new Promise((resolve) => {
-                if (inlineImg.complete) return resolve();
-                inlineImg.onload = resolve;
-                inlineImg.onerror = resolve;
-                setTimeout(resolve, 3000); // 最多等 3 秒
-            });
-        }
-
-        const canvas = await html2canvas(container, {
+        const target = document.getElementById('export-target');
+        const canvas = await html2canvas(target, {
             scale: 2,
             useCORS: true,
-            allowTaint: true,
             backgroundColor: '#ffffff',
+            logging: false,
+            onclone: (clonedDoc) => {
+                const clonedOverlay = clonedDoc.getElementById('export-overlay');
+                if (clonedOverlay) clonedOverlay.style.display = 'none';
+            }
         });
 
-        document.body.removeChild(container);
-
         const link = document.createElement('a');
-        link.download = '爆款笔记_' + new Date().getTime() + '.png';
+        link.download = `小红书爆款笔记_${Date.now()}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        showToast('一图流长图已保存！📸', '✅');
+        showToast('长图已导出并保存 📸', '✅');
     } catch (err) {
-        console.error('导出失败:', err);
-        // 清理可能残留的临时容器
-        const leftover = document.querySelector('div[style*="left: -9999px"]');
-        if (leftover) document.body.removeChild(leftover);
-        showToast('图片导出失败，请重试', '❌');
+        console.error(err);
+        showToast('导出失败，请重试', '❌');
     } finally {
         overlay.style.display = 'none';
     }
 }
 
-// Trending Banner
-async function loadTrending() {
-    const marquee = document.getElementById('trending-marquee');
-    if (window.location.protocol === 'file:') {
-        marquee.innerHTML = `<span class="trending-item" onclick="fillTopic('#A股全面反弹')">1. A股全面反弹🔥</span><span class="trending-item" onclick="fillTopic('#近期爆火减肥法')">2. 近期爆火减肥法📈</span><span class="trending-item" onclick="fillTopic('#苹果发布会')">3. 苹果发布会✨</span>`;
-        return;
-    }
-    try {
-        const res = await fetch('/api/news');
-        const data = await res.json();
-        if (data.items && data.items.length > 0) {
-            const html = data.items.slice(0, 5).map((item, i) =>
-                `<span class="trending-item" onclick="fillTopic('${item.title}')">${i + 1}. ${item.title}</span>`
-            ).join(' &nbsp;&nbsp;|&nbsp;&nbsp; ');
-            marquee.innerHTML = html + '&nbsp;&nbsp;|&nbsp;&nbsp;' + html; // Duplicate for smooth loop
-        }
-    } catch (e) {
-        console.error(e);
-        marquee.innerHTML = '🔥 获取实时热点失败，请稍后再试';
-    }
-}
-
-// Core Generation
-async function generatePost() {
-    const topic = document.getElementById('topic').value.trim();
-    const keywords = document.getElementById('keywords').value.trim();
-    if (!topic) return showToast('请输入你想写的主题！', '⚠️');
-
-    const btn = document.getElementById('generate-btn');
-    btn.classList.add('loading');
-    btn.innerHTML = '⚡ AI 正在疯狂创作中...';
-
-    document.getElementById('preview-title').innerHTML = '<span class="cursor-blink">|</span>';
-    document.getElementById('preview-body').innerHTML = '<span class="cursor-blink">|</span>';
-    document.getElementById('sensitive-panel').classList.remove('active');
-    document.getElementById('refine-panel').classList.remove('active');
-
-    if (window.location.protocol === 'file:') {
-        await new Promise(r => setTimeout(r, 1500));
-        const mock = {
-            titles: ['🔥 ' + topic + ' 终极指南', '✨ 今天终于对 ' + topic + ' 下手了', '避雷❗ ' + topic + ' 别乱买'],
-            body: `家人们谁懂啊！今天终于来出【${topic}】的攻略啦😭\n\n本来以为是个坑，没想到居然这么绝！整理了整整一晚上，没有任何废话全是干货！\n\n赶紧点赞收藏，不然刷着刷着就找不到了～🔥`,
-            tags: `#${topic} #爆款推荐 #小红书网感`
-        };
-        finishGeneration(mock, topic);
-        btn.innerHTML = '🚀 一键激发 AI 创作 (Demo)';
-        btn.classList.remove('loading');
-        return;
-    }
-
-    try {
-        const res = await fetch('/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                topic, keywords, style: currentStyle,
-                length: lengths[document.getElementById('length-slider').value]
-            })
-        });
-        if (!res.ok) throw new Error('API Request Failed');
-        const data = await res.json();
-        finishGeneration(data, topic);
-    } catch (e) {
-        console.error(e);
-        showToast('AI 服务器未响应，请检查 Vercel 部署', '❌');
-    } finally {
-        btn.innerHTML = '🚀 一键激发 AI 创作';
-        btn.classList.remove('loading');
-    }
-}
-
-async function refinePost(promptInfo) {
-    const topic = document.getElementById('topic').value;
-    const currentBody = document.getElementById('preview-body').innerText;
-    const keywords = document.getElementById('keywords').value + ` \n补充要求：基于以下原文，${promptInfo}。\n【原文】：${currentBody.substring(0, 100)}...`;
-
-    showToast('AI 正在重新构思...', '✨');
-    await generatePost();
-    document.getElementById('refine-panel').classList.remove('active');
-}
-
-// Typewriter Effect & UI Update
-function finishGeneration(data, topic) {
-    aiTitles = data.titles || [data.title || data.titles[0]];
-    const bodyText = data.body || '';
-    const tagsText = data.tags || '';
-
-    // Random Avatar + Name
-    const names = ['一只小鹿', '周末逃跑计划', '半岛咖啡', '野生测评家', '爆款干货铺'];
-    document.querySelector('.author-name').textContent = names[Math.floor(Math.random() * names.length)];
-    document.querySelector('.author-avatar').style.backgroundImage = `url('https://api.dicebear.com/7.x/adventurer/svg?seed=${Math.random().toString(36)}')`;
-
-    // Random Image
-    document.getElementById('preview-image').src = `https://picsum.photos/seed/${Math.random().toString(36)}/600/800`;
-
-    // Typewriter logic
-    const bodyEl = document.getElementById('preview-body');
-    const titleEl = document.getElementById('preview-title');
-
-    titleEl.textContent = aiTitles[0];
-    bodyEl.innerHTML = '<span class="cursor-blink">|</span>';
-
-    let i = 0;
-    const speed = 20; // ms per char
-    const typeWriter = setInterval(() => {
-        if (i < bodyText.length) {
-            bodyEl.innerHTML = bodyText.substring(0, i + 1) + '<span class="cursor-blink">|</span>';
-            i++;
-            if (i % 10 === 0) updateWordCount();
-        } else {
-            clearInterval(typeWriter);
-            bodyEl.innerHTML = bodyText.replace(/\n/g, '<br>');
-            document.getElementById('preview-tags').textContent = tagsText;
-            updateWordCount();
-            showToast('爆款笔记生成完毕！', '🎉');
-            document.getElementById('refine-panel').classList.add('active'); // Show AI Refine Panel
-            renderTitleControls();
-            saveSearch(aiTitles[0], bodyText, tagsText, topic);
-        }
-    }, speed);
-}
-
-function renderTitleControls() {
-    const dotGroup = document.getElementById('dot-group');
-    const ui = document.getElementById('title-switcher-ui');
-    if (aiTitles.length > 1) {
-        ui.style.display = 'flex';
-        dotGroup.innerHTML = aiTitles.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="switchTitle(${i})"></div>`).join('');
-    } else {
-        ui.style.display = 'none';
-    }
-}
-function switchTitle(idx) {
-    document.getElementById('preview-title').textContent = aiTitles[idx];
-    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-}
-
-// Sensitive check
-function checkSensitiveWords() {
-    const text = document.getElementById('preview-title').innerText + document.getElementById('preview-body').innerText;
-    const discovered = blackList.filter(w => text.includes(w));
-    const list = document.getElementById('risk-list');
-    list.innerHTML = '';
-    if (discovered.length > 0) {
-        document.getElementById('sensitive-panel').classList.add('active');
-        discovered.forEach(w => {
-            const el = document.createElement('span');
-            el.className = 'risk-item'; el.textContent = w;
-            list.appendChild(el);
-        });
-        showToast(`发现 ${discovered.length} 个敏感词结构`, '⚠️');
-    } else {
-        document.getElementById('sensitive-panel').classList.remove('active');
-        showToast('非常纯净！未检测到限流词', '✅');
-    }
-}
-
-function copyContent(type) {
-    const t = document.getElementById('preview-title').innerText;
-    const b = document.getElementById('preview-body').innerText;
-    const tags = document.getElementById('preview-tags').innerText;
-    const text = type === 'title' ? t : `${t}\n\n${b}\n\n${tags}`;
-
-    // Fallback for document.execCommand usage
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('文案已复制到剪贴板！📋');
-}
-
-// Sidebar & History (LocaStorage)
-function toggleHistorySidebar() {
-    document.getElementById('history-sidebar').classList.toggle('active');
-    document.getElementById('sidebar-overlay').classList.toggle('active');
-}
-
-function getHistory() { return JSON.parse(localStorage.getItem('xhs_history_v2') || '[]'); }
-function saveHistory(data) { localStorage.setItem('xhs_history_v2', JSON.stringify(data)); }
-
-function saveSearch(title, body, tags, topic) {
-    const items = getHistory();
-    items.unshift({ id: Date.now(), title, body, tags, topic, date: new Date().toLocaleDateString(), starred: false });
-    if (items.length > 30) items.pop();
-    saveHistory(items);
-    renderHistoryList();
-}
-
-function toggleStar(e, id) {
-    e.stopPropagation();
-    const items = getHistory();
-    const item = items.find(i => i.id === id);
-    if (item) {
-        item.starred = !item.starred;
-        saveHistory(items);
-        renderHistoryList();
-        showToast(item.starred ? '已加入收藏夹 ⭐' : '已取消收藏');
-    }
-}
-
-function loadHistoryItem(id) {
-    const item = getHistory().find(i => i.id === id);
-    if (!item) return;
-    aiTitles = [item.title];
-    document.getElementById('preview-title').textContent = item.title;
-    document.getElementById('preview-body').innerHTML = item.body.replace(/\n/g, '<br>');
-    document.getElementById('preview-tags').textContent = item.tags;
-    document.getElementById('title-switcher-ui').style.display = 'none';
-    toggleHistorySidebar();
-    showToast('已恢复历史灵感 ✨');
-    updateWordCount();
-}
-
-function filterHistory(filter) {
-    currentFilter = filter;
-    document.getElementById('filter-all').style.background = filter === 'all' ? '#e2e8f0' : '#f8fafc';
-    document.getElementById('filter-starred').style.background = filter === 'starred' ? '#fef3c7' : '#f8fafc';
+// --- History & Favorites ---
+function saveToHistory(item) {
+    let history = JSON.parse(localStorage.getItem('xhs_pro_history') || '[]');
+    history.unshift(item);
+    if (history.length > 20) history = history.slice(0, 20);
+    localStorage.setItem('xhs_pro_history', JSON.stringify(history));
     renderHistoryList();
 }
 
 function renderHistoryList() {
-    const q = document.getElementById('history-search').value.toLowerCase();
-    let items = getHistory();
-    if (currentFilter === 'starred') items = items.filter(i => i.starred);
-    if (q) items = items.filter(i => (i.title + i.topic).toLowerCase().includes(q));
+    const list = document.getElementById('history-list');
+    const history = JSON.parse(localStorage.getItem('xhs_pro_history') || '[]');
+    
+    if (history.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b; font-size:13px;">还没有创作记录哦</div>`;
+        return;
+    }
 
-    const html = items.length === 0 ? '<div style="text-align:center; color:#94a3b8; padding: 20px;">暂无记录</div>' :
-        items.map(i => `
-                    <div class="history-card" onclick="loadHistoryItem(${i.id})">
-                        <div class="card-title">${i.title}</div>
-                        <div class="card-meta">
-                            <span># ${i.topic}</span>
-                            <span>${i.date}</span>
-                        </div>
-                        <div class="star-btn ${i.starred ? 'active' : ''}" onclick="toggleStar(event, ${i.id})">
-                            ${i.starred ? '⭐' : '☆'}
-                        </div>
-                    </div>`).join('');
-    document.getElementById('history-list').innerHTML = html;
+    list.innerHTML = history.map((item, index) => `
+        <div class="history-item" onclick="loadHistory(${index})">
+            <div style="font-size:14px; font-weight:700; margin-bottom:5px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.title}</div>
+            <div style="font-size:12px; color:#94a3b8;">${item.topic} · ${item.time}</div>
+        </div>
+    `).join('');
+}
+
+function loadHistory(idx) {
+    const history = JSON.parse(localStorage.getItem('xhs_pro_history') || '[]');
+    const item = history[idx];
+    if (!item) return;
+
+    aiTitles = [item.title];
+    document.getElementById('preview-title').textContent = item.title;
+    document.getElementById('preview-body').textContent = item.body;
+    document.getElementById('preview-tags').textContent = item.tags;
+    document.getElementById('title-switcher-ui').style.display = 'none';
+    
+    toggleHistorySidebar();
+    showToast('记录已恢复 ✨', '📚');
 }
 
 function clearHistory() {
-    if (confirm('警告：此操作不可恢复，确定清空全部历史记录吗？')) {
-        localStorage.removeItem('xhs_history_v2');
+    if (confirm('确认清空所有历史记录吗？不可恢复哦。')) {
+        localStorage.removeItem('xhs_pro_history');
         renderHistoryList();
-        showToast('记录已清空 🗑️');
     }
 }
 
-// Particle System
-function initParticles() {
-    const c = document.getElementById('particles');
-    for (let i = 0; i < 20; i++) {
-        const el = document.createElement('div');
-        el.className = 'particle';
-        const s = Math.random() * 5 + 2;
-        el.style.width = s + 'px'; el.style.height = s + 'px';
-        el.style.left = Math.random() * 100 + '%';
-        el.style.animationDuration = (Math.random() * 15 + 10) + 's';
-        el.style.animationDelay = (Math.random() * 10) + 's';
-        c.appendChild(el);
+function toggleHistorySidebar() {
+    const sidebar = document.getElementById('history-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const isActive = sidebar.classList.contains('active');
+    
+    if (isActive) {
+        sidebar.classList.remove('active');
+        overlay.style.display = 'none';
+    } else {
+        sidebar.classList.add('active');
+        overlay.style.display = 'block';
+        renderHistoryList();
     }
 }
 
-</script>
+// --- Utils ---
+function showToast(msg, icon = '✨', duration = 3000) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-icon').textContent = icon;
+    
+    toast.classList.add('active');
+    setTimeout(() => {
+        toast.classList.remove('active');
+    }, duration);
+}
+
+function updateWordCount() {
+    const body = document.getElementById('preview-body').innerText;
+    const count = body.length;
+    document.getElementById('word-count-display').textContent = `建议字数：${count} 字`;
+}
+
+// --- News/Trending ---
+async function loadNews() {
+    const marquee = document.getElementById('trending-marquee');
+    try {
+        const res = await fetch(NEWS_API_URL);
+        const data = await res.json();
+        if (data.items && data.items.length > 0) {
+            const html = data.items.map(item => ` &nbsp; 🔥 ${item.title} &nbsp; `).join(' | ');
+            marquee.innerHTML = html + html; 
+        } else {
+            marquee.innerHTML = "🔥 如何快速涨粉 | 小红书流量密码 | 2026流行穿搭趋势 | AI创作新风口";
+        }
+    } catch (e) {
+        marquee.innerHTML = "🔥 如何快速涨粉 | 小红书流量密码 | 2026流行穿搭趋势 | AI创作新风口";
+    }
+}
+
+// --- Main Init ---
+window.onload = () => {
+    loadNews();
+    renderHistoryList();
+    
+    // Interval update for clock
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }, 60000);
+};
+
+// --- Supplementary Logic (Sensitive words & Refine) ---
+const blackList = ["第一", "最", "绝对", "100%", "暴利", "万能", "赚钱", "药到病除", "特效", "最贵", "赚钱项目", "兼职", "月入过万"];
+
+function checkSensitiveWords() {
+    const title = document.getElementById('preview-title').innerText;
+    const bodyText = document.getElementById('preview-body').innerText;
+    const allText = title + bodyText;
+    
+    const found = blackList.filter(word => allText.includes(word));
+    const panel = document.getElementById('sensitive-panel');
+    const listEl = document.getElementById('risk-list');
+    
+    if (found.length > 0) {
+        listEl.innerHTML = found.map(w => `<span class="risk-item">${w}</span>`).join('');
+        panel.style.display = 'block';
+        showToast('发现敏感词，建议优化', '⚠️');
+    } else {
+        panel.style.display = 'none';
+        showToast('内容安全，暂未发现违禁词', '✅');
+    }
+}
+
+async function refinePost(instruction) {
+    const topic = document.getElementById('topic').value;
+    const currentBody = document.getElementById('preview-body').innerText;
+    
+    showToast('AI 正在按指令优化...', '✨');
+    const btn = document.getElementById('generate-btn');
+    btn.classList.add('loading');
+
+    try {
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic: `在原有内容基础上：${instruction}`,
+                keywords: `原有文案：${currentBody.substring(0, 200)}...`,
+                style: currentStyle,
+                length: 'medium'
+            })
+        });
+        const data = await response.json();
+        typeWriterEffect('preview-body', data.body);
+        showToast('优化完成！', '✅');
+    } catch (e) {
+        showToast('优化请求失败', '❌');
+    } finally {
+        btn.classList.remove('loading');
+    }
+}
+
+function copyContent(type) {
+    const title = document.getElementById('preview-title').innerText;
+    const bodyText = document.getElementById('preview-body').innerText;
+    const tagsText = document.getElementById('preview-tags').innerText;
+    
+    let textToCopy = "";
+    if (type === 'all') {
+        textToCopy = title + "\n\n" + bodyText + "\n\n" + tagsText;
+    } else {
+        textToCopy = title;
+    }
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast('复制成功，快去发布吧！', '📋');
+    });
+}
+
+function setFilter(filter) {
+    document.getElementById('preview-image').style.filter = filter !== 'none' ? filter : '';
+    showToast('已应用滤镜效果', '🎨', 2000);
+}
+
+    </script>
 </body>
 </html>

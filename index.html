@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小红书爆款生成器 Pro Max - 官方变现版</title>
+    <title>小红书爆款生成器 Pro Max - Google 广告变现版</title>
     <meta name="description" content="专为小红书打造的 AI 爆款文案生成器。一键写出超有网感的干货分享、碎碎念、避雷避坑笔记。">
     <meta name="keywords" content="小红书, AI文案, 爆款标题, 自媒体工具, 文案助手, AI写作, 流量密码">
     
+    <!-- Google AdSense AMP Auto Ads Script -->
+    <script async custom-element="amp-auto-ads"
+            src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://my-first-agent.vercel.app/">
@@ -60,54 +65,45 @@
         input[type="text"]:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(255,36,66,0.2); }
         
         .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        /* ... existing styles ... */
         .style-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 15px 5px; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; color: var(--text-muted); cursor: pointer; transition: 0.3s; font-size: 13px; font-weight: 700; }
         .style-btn.active { background: rgba(255,36,66,0.15); border-color: var(--primary-color); color: white; box-shadow: 0 0 15px rgba(255,36,66,0.2); }
-        
         .range-slider { -webkit-appearance:none; appearance:none; width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; outline:none; }
         .range-slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:20px; height:20px; background:var(--primary-color); border-radius:50%; cursor:pointer; box-shadow:0 0 10px var(--primary-glow); }
-        
         .generate-btn { width: 100%; padding: 22px; background: var(--primary-color); color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 20px; box-shadow: 0 10px 25px rgba(255,36,66,0.3); transition: 0.3s; }
         .generate-btn.loading { animation: pulse 1.5s infinite; pointer-events: none; }
         @keyframes pulse { 0% { opacity:1; } 50% { opacity:0.6; } 100% { opacity:1; } }
 
         /* Ad Slots */
         .ad-slot { margin: 20px 0; border: 1px dashed var(--card-border); border-radius: 12px; padding: 20px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
-        .ad-slot:hover { border-color: var(--pro-gold); background: rgba(255,255,255,0.05); }
+        .ad-slot:hover { border-color: var(--primary-color); background: rgba(255,255,255,0.05); }
         .ad-label { position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.1); font-size: 10px; padding: 2px 8px; border-bottom-left-radius: 8px; }
 
         .phone-mockup { width: 375px; height: 760px; background: #000; border-radius: 54px; padding: 12px; position: relative; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.5); overflow: hidden; }
+        /* ... rest of existing styles ... */
         .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 30px; background: #000; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 10; }
         .phone-scroll { height: 100%; background: white; border-radius: 42px; overflow-y: auto; color: #333; }
         .phone-scroll::-webkit-scrollbar { width: 0; }
         .cover-img { width: 100%; height: 375px; object-fit: cover; }
         .post-content { padding: 20px; }
-        .post-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; font-family: 'Noto Sans SC', sans-serif; }
+        .post-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; color: #000; line-height: 1.4; }
         .post-body { font-size: 15px; line-height: 1.8; white-space: pre-wrap; color: #333; }
         .post-tags { font-size: 14px; color: #135bb5; margin-top: 15px; font-weight: 700; }
-        
         .title-switcher { background:#fff5f6; padding:12px; border-radius:12px; margin-bottom:15px; display:none; flex-direction:column; gap:8px; border:1px solid #ffe4e6; }
         .dot-group { display:flex; gap:8px; }
         .dot { width:8px; height:8px; border-radius:50%; background:#ffccd4; cursor:pointer; }
         .dot.active { width:24px; border-radius:10px; background:var(--primary-color); }
-
         .exporting-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; flex-direction:column; align-items:center; justify-content:center; color:white; font-weight:800; border-radius:42px; z-index:100; }
-
         .sidebar { position: fixed; right: 0; top: 0; width: 400px; height: 100%; background: rgba(15,23,42,0.98); backdrop-filter: blur(25px); border-left: 1px solid var(--card-border); z-index: 1000; transform: translateX(100%); transition: 0.5s; padding: 40px; display: flex; flex-direction: column; }
         .sidebar.active { transform: translateX(0); }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
         .history-list { flex:1; overflow-y:auto; margin-top:20px; }
         .history-item { background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:12px; padding:15px; margin-bottom:12px; cursor:pointer; transition:0.3s; }
         .history-item:hover { border-color:var(--primary-color); background:rgba(255,255,255,0.06); }
-
         .action-btn { padding: 14px; border-radius: 12px; border: 1px solid var(--card-border); background: transparent; color: white; cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
         .action-btn.primary { background: white; color: #0f172a; border: none; }
-        
         .toast { position:fixed; top:30px; left:50%; transform:translateX(-50%) translateY(-100px); background:white; color:#000; padding:15px 30px; border-radius:100px; z-index:2000; font-weight:800; box-shadow:0 10px 30px rgba(0,0,0,0.2); transition:0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
         .toast.active { transform:translateX(-50%) translateY(0); }
-        
-        .sensitive-panel { margin-top:20px; padding:15px; background:rgba(220,38,38,0.1); border:1px solid rgba(220,38,38,0.2); border-radius:12px; display:none; }
-
-        /* Modal */
         .modal { position:fixed; inset:0; z-index:2100; display:none; align-items:center; justify-content:center; padding:20px; }
         .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); }
         .modal-content { position:relative; background:rgba(255,255,255,0.1); border:1px solid var(--card-border); border-radius:24px; padding:30px; width:100%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s; }
@@ -118,6 +114,11 @@
     </style>
 </head>
 <body>
+    <!-- Google AdSense AMP Auto Ads Tag -->
+    <amp-auto-ads type="adsense"
+            data-ad-client="ca-pub-6245905201306527">
+    </amp-auto-ads>
+
     <div class="particles"></div>
     <div class="layout-wrapper">
         <div class="trending-banner">
@@ -125,7 +126,7 @@
             <div class="trending-marquee"><div class="trending-content" id="t-marquee">加载中...</div></div>
         </div>
         <header class="header">
-            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">官方商业版 | 联系微信: tonybon919</p></div></div>
+            <div class="logo-wrap"><div class="logo-icon">薯</div><div style="margin-left:15px"><h1>爆款生成器 <span class="pro-badge">Pro✨</span></h1><p style="color:var(--text-muted); font-size:14px">官方商业版 | 合作微信: tonybon919</p></div></div>
             <button class="nav-btn" onclick="tSidebar()">🕜 管理中心</button>
         </header>
 
@@ -133,13 +134,12 @@
             <div class="glass-panel">
                 <div class="ad-slot" onclick="openModal()">
                     <span class="ad-label">AD 合作位-TOP</span>
-                    ✨ 投放您的品牌广告，分享爆款流量红利
+                    ✨ 投放您的品牌广告，占领流量入口
                 </div>
                 <div class="form-group">
                     <label><span>🎯 爆款笔记主题</span><span style="font-size:12px; font-weight:400">回车键快捷生成</span></label>
                     <input type="text" id="topic" placeholder="输入你想写的主题..." onkeypress="if(event.key==='Enter')generate()">
                 </div>
-                <!-- ... Rest of UI same as V3 ... -->
                 <div class="form-group">
                     <label>🎭 爆款文案风格</label>
                     <div class="style-grid">
@@ -164,9 +164,12 @@
                     <div class="phone-scroll">
                         <img id="p-img" src="https://picsum.photos/seed/xhs/600/800" class="cover-img" alt="封面" crossorigin="anonymous">
                         <div class="post-content">
-                            <div class="title-switcher" id="t-sw"><span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多组爆款标题</span><div class="dot-group" id="d-group"></div></div>
+                            <div class="title-switcher" id="t-sw">
+                                <span style="font-size:12px; color:var(--primary-color); font-weight:800">🏆 AI 推荐了多组爆款标题</span>
+                                <div class="dot-group" id="d-group"></div>
+                            </div>
                             <div class="post-title" id="p-title" contenteditable="true">在这里输出灵感...</div>
-                            <div class="post-body" id="p-body" contenteditable="true">AI 正在精准捕获全球爆款趋势。</div>
+                            <div class="post-body" id="p-body" contenteditable="true">点击按钮，开启爆款之路。</div>
                             <div class="post-tags" id="p-tags" contenteditable="true">#小红书 #爆款生成器 Pro</div>
                         </div>
                     </div>
@@ -184,7 +187,7 @@
     <div class="sidebar" id="sidebar">
         <h2 style="font-size:22px">🕜 运营管理</h2>
         <div class="ad-slot" onclick="openModal()" style="padding:15px; font-size:11px">
-            🌟 原生展示广告预留位 | 流量变现进行时
+            🌟 原生展示广告预留位 | AdSense 已激活
         </div>
         <div class="history-list" id="h-list"></div>
         <div style="border-top:1px solid var(--card-border); padding-top:20px; margin-top:auto">
@@ -225,11 +228,11 @@
         function openModal(){ document.getElementById('biz-modal').style.display='flex'; }
         function closeModal(){ document.getElementById('biz-modal').style.display='none'; }
         function showT(m,i='✨'){ const t=document.getElementById('toast'); document.getElementById('t-msg').innerText=m; document.getElementById('t-icon').innerText=i; t.classList.add('active'); setTimeout(()=>t.classList.remove('active'), 3000); }
-        function copyWechat(){ navigator.clipboard.writeText('tonybon919').then(()=>showT('微信号已复制到剪贴板','✅')); }
+        function copyWechat(){ navigator.clipboard.writeText('tonybon919').then(()=>showT('微信号已复制','✅')); }
 
         async function loadN() {
             const m = document.getElementById('t-marquee'); 
-            const fb = ["AI营销新风向","零碎时间变现攻略","自媒体爆款逻辑拆解"];
+            const fb = ["AI时代：流量博弈论","小红书高效笔记法则","2026变现趋势报告"];
             try {
                 const res = await fetch('/api/news'); const d = await res.json();
                 const items = d.items?.map(x=>x.title) || fb;
